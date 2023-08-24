@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+</head>
+<body>
+
+<h1>List of all orders:</h1>
+
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>order date</th>
+        <th>user</th>
+        <th>order details</th>
+        <th>cost</th>
+        <th>edit</th>
+        <th>delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orderDto:${orderDtoList}">
+        <td th:text="${orderDto.id}">123</td>
+        <td th:text="${orderDto.orderDate}">'2023-08-17 22:22:22'</td>
+        <td><a th:text="${orderDto.userName}" th:href="|/user/${orderDto.userId}|">Default user</a></td>
+        <td>
+            <button type="button" class="collapsible">View order details</button>
+            <div class="content">
+                <table class="styled-table-inner">
+                    <tr>
+                        <th>id</th>
+                        <th>order_id</th>
+                        <th>product</th>
+                        <th>amount</th>
+                        <th>price</th>
+                    </tr>
+                    <tr th:each="elem:${orderDto.orderDetailsDtoList}">
+                        <td th:text="${elem.id}"></td>
+                        <td th:text="${elem.orderId}"></td>
+                        <td th:text="${elem.productName}"></td>
+                        <td th:text="${elem.amount}"></td>
+                        <td th:text="${elem.price}"></td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+        <td th:text="${orderDto.cost}">999</td>
+        <td><a th:href="|/order/${orderDto.id}/edit|">edit</a></td>
+        <td><a th:href="|/order/${orderDto.id}/delete|">delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<div><a href="/">Back</a></div>
+
+<script>
+    const coll = document.getElementsByClassName("collapsible");
+    let i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            const content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

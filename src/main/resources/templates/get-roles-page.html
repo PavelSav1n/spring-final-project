@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Roles</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+
+<div class="menu">
+    <ul>
+        <li><a href="#">home</a></li>
+        <li><a href="/user">users</a></li>
+        <li><a href="/role">roles</a></li>
+        <li><a href="/category">categories</a></li>
+        <li><a href="/product">products</a></li>
+        <li><a href="/stock">stock</a></li>
+        <li><a href="/order">orders</a></li>
+        <li><a href="/order-details">order details</a></li>
+    </ul>
+</div>
+
+<!-- Table -->
+
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1>List of Roles:</h1>
+
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>id</th>
+                <th>name</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="role:${rolesList}">
+                <td th:text="${roleStat.count}">1</td>
+                <td th:text="${role.id}">123</td>
+                <td><a th:text="${role.name}" th:href="|/role/${role.id}|">Default role</a></td>
+                <td><a th:href="|/role/${role.id}/edit|">edit</a></td>
+                <td><a th:href="|/role/${role.id}/delete|">delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/">Back</a></div>
+            <div class="btn-div"><a class="btn" href="/role/add">Add new role</a></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

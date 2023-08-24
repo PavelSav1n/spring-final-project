@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add new role</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+<div class="menu">
+    <ul>
+        <li><a href="#">home</a></li>
+        <li><a href="/user">users</a></li>
+        <li><a href="/role">roles</a></li>
+        <li><a href="/category">categories</a></li>
+        <li><a href="/product">products</a></li>
+        <li><a href="/stock">stock</a></li>
+        <li><a href="/order">orders</a></li>
+        <li><a href="/order-details">order details</a></li>
+    </ul>
+</div>
+
+<!-- Form -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1>Add new Role:</h1>
+
+        <form id="add-role-form" th:action="@{/role/add}" th:method="post" action="add-role-page.html">
+            <div class="mb-3">
+                <label for="role-name-input" class="form-label">Role name:</label>
+                <input id="role-name-input" required name="name" type="text" value="" class="formbold-form-input"/>
+            </div>
+            <!-- Buttons -->
+            <input class="formbold-btn" type="submit" value="submit">
+            <input class="formbold-btn" type="reset" value="reset">
+
+        </form>
+    </div>
+</div>
+</div>
+
+<!-- Table -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1>List of Roles:</h1>
+
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>id</th>
+                <th>name</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="roleElem:${rolesList}">
+                <td th:text="${roleElemStat.count}">1</td>
+                <td th:text="${roleElem.id}">123</td>
+                <td><a th:text="${roleElem.name}" th:href="|/role/${roleElem.id}|">Default role</a></td>
+                <td><a th:href="|/role/${roleElem.id}/edit|">edit</a></td>
+                <td><a th:href="|/role/${roleElem.id}/delete|">delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Buttons -->
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/role">Back</a></div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

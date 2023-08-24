@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|Order ${orderDto.id}|">Category page</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<h1 th:text="|Order #'${orderDto.id}' details:|">Category details:</h1>
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>order date</th>
+        <th>user</th>
+        <th>orderDetails</th>
+        <th>cost</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${orderDto.id}">123</td>
+        <td th:text="${orderDto.orderDate}">Default orderDate</td>
+        <td th:text="${orderDto.userName}">Default user</td>
+        <td><a th:text="${orderDto.orderDetails}" th:href="|/order-details/${orderDto.orderDetails.id}|"></a>Default
+            order details
+        </td>
+        <td th:text="${orderDto.cost}">999</td>
+    </tr>
+    </tbody>
+</table>
+<div><a href="/order">Back</a></div>
+</body>
+</html>

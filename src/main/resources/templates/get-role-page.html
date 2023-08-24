@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|${role.name} role page|">Role page</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<h1 th:text="|'${role.name}' role details:|">Role details:</h1>
+
+<table class="styled-table">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${role.id}">123</td>
+        <td th:text="${role.name}">Default role</td>
+    </tr>
+    </tbody>
+</table>
+<div><a href="/role">Back</a></div>
+</body>
+</html>
