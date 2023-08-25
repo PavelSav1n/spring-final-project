@@ -15,13 +15,13 @@ public class SpringFinalProjectApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(SpringFinalProjectApplication.class, args);
-        RoleService roleService = context.getBean(RoleService.class);
-        UserService userService = context.getBean(UserService.class);
-        CategoryService categoryService = context.getBean(CategoryService.class);
-        ProductService productService = context.getBean(ProductService.class);
-        StockService stockService = context.getBean(StockService.class);
-        OrderService orderService = context.getBean(OrderService.class);
-        OrderDetailsService orderDetailsService = context.getBean(OrderDetailsService.class);
+//        RoleService roleService = context.getBean(RoleService.class);
+//        UserService userService = context.getBean(UserService.class);
+//        CategoryService categoryService = context.getBean(CategoryService.class);
+//        ProductService productService = context.getBean(ProductService.class);
+//        StockService stockService = context.getBean(StockService.class);
+//        OrderService orderService = context.getBean(OrderService.class);
+//        OrderDetailsService orderDetailsService = context.getBean(OrderDetailsService.class);
 
 //        System.out.println("Roles:");
 //        roleService.printAll();

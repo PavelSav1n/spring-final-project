@@ -9,6 +9,9 @@
 
 <body>
 
+<!-- Menu -->
+<div th:replace="modules :: navigation"></div>
+
 <h1 th:text="|'${userDto.name}' user details:|">User details:</h1>
 
 <table class="styled-table">

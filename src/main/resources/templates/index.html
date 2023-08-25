@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <title>Main page</title>
   <link rel="stylesheet" th:href="@{/style.css}">
 </head>
+
 <body>
-<div class="menu">
-  <ul>
-    <li><a href="#">home</a></li>
-    <li><a href="/user">users</a></li>
-    <li><a href="/role">roles</a></li>
-    <li><a href="/category">categories</a></li>
-    <li><a href="/product">products</a></li>
-    <li><a href="/stock">stock</a></li>
-    <li><a href="/order">orders</a></li>
-    <li><a href="/order-details">order details</a></li>
-  </ul>
-</div>
+
+<!-- Menu -->
+<div th:replace="modules :: navigation"></div>
 
 </body>
 </html>
