@@ -1,9 +1,13 @@
 package ps.springfinalproject.rest.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ps.springfinalproject.domain.Role;
@@ -13,7 +17,9 @@ import ps.springfinalproject.rest.dto.UserDto;
 import ps.springfinalproject.services.RoleService;
 import ps.springfinalproject.services.UserService;
 
+//import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,15 +48,35 @@ public class UserController {
 
     @GetMapping("/user/add")
     public String addUserPage(Model model) {
-        List<UserDto> userDtoList = userService.findAll().stream().map(UserDto::toDto).collect(Collectors.toList());
-        model.addAttribute("userDtoList", userDtoList);
-        List<RoleDto> roleDtoList = roleService.findAll().stream().map(RoleDto::toDto).toList();
-        model.addAttribute("roleDtoList", roleDtoList);
+        model.addAttribute("userDtoList", userService.findAll().stream().map(UserDto::toDto).toList());
+        model.addAttribute("roleDtoList", roleService.findAll().stream().map(RoleDto::toDto).toList());
+        model.addAttribute("userDto", new UserDto()); // To use th:field in "view"
         return "add-user-page";
     }
 
     @PostMapping("/user/add")
-    public String postAddUserPage(UserDto userDto) {
+    public String postAddUserPage(@Valid UserDto userDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("userDtoList", userService.findAll().stream().map(UserDto::toDto).toList());
+            model.addAttribute("roleDtoList", roleService.findAll().stream().map(RoleDto::toDto).toList());
+            // UserDto() object is already in model, so we don't need to add it here to use th:field in "view"
+
+            if (userService.findByEmail(userDto.getEmail()).isPresent()){
+                result.rejectValue("email", null,"There is already an account registered with that email");
+            }
+            if (!userDto.getPassword().equals(userDto.getPassword2())){
+                result.rejectValue("password2",null,"Passwords must match");
+            }
+
+            Map<String, Object> model1 = result.getModel();
+            int i = 0;
+            for (Map.Entry<String, Object> stringObjectEntry : model1.entrySet()) {
+                System.out.println(i++);
+                System.out.println("key string:" + stringObjectEntry.getKey() + " | value object: " + stringObjectEntry.getValue());
+            }
+
+            return "add-user-page";
+        }
         User userFromDto = UserDto.fromDto(userDto);
         Optional<Role> roleFromPersist = roleService.findById(userFromDto.getRole().getId());
         if (roleFromPersist.isPresent()) {

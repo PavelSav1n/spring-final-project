@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+//import javax.validation.constraints.Email;
+//import javax.validation.constraints.NotBlank;
+//import javax.validation.constraints.Size;
+
 @Entity(name = "users")
 @Data
 @AllArgsConstructor
@@ -14,7 +18,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+//    @NotBlank(message = "Name is required") // (not to be just white spaces)
+//    @Size(min = 2, max = 50, message = "Message must be between 2 and 50 characters.")
     private String name;
+//    @NotBlank(message = "Email is required")
+//    @Email(message = "Invalid email. Try again.")
     private String email;
     private String password;
     @Column(name = "bdate")

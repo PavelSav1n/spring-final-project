@@ -12,16 +12,18 @@
 <!-- Menu -->
 <div th:replace="~{modules :: navigation}"></div>
 
+
 <!-- Form -->
 <div class="main-wrapper">
     <div class="form-wrapper">
         <h1>Add new Role:</h1>
+        <p>This is test thing</p>
 
         <form id="add-role-form" th:action="@{/role/add}" th:method="post" action="add-role-page.html">
             <div class="mb-3">
                 <label for="role-name-input" class="form-label">Role name:</label>
-                <input id="role-name-input" th:field="${roleDto.name}" value="" class="formbold-form-input"/>
-                <p class="error" th:errors="${roleDto.name}"></p>
+                <input id="role-name-input" th:field="${role.name}" value="" class="formbold-form-input"/>
+                <p class="error" th:errors="${role.name}"></p>
             </div>
             <!-- Buttons -->
             <input class="formbold-btn" type="submit" value="submit">

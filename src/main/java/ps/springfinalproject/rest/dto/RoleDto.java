@@ -1,13 +1,20 @@
 package ps.springfinalproject.rest.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ps.springfinalproject.domain.Role;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RoleDto {
+
     private String id;
+    @NotBlank(message = "Role name is required ")
+    @Size(min = 3, max = 50, message = "Role name must be between 2 and 50 characters.")
     private String name;
 
     public static RoleDto toDto(Role role) {

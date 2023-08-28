@@ -1,14 +1,19 @@
 package ps.springfinalproject.rest.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ps.springfinalproject.domain.Role;
 import ps.springfinalproject.rest.dto.RoleDto;
 import ps.springfinalproject.services.RoleService;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +25,7 @@ public class RoleController {
 
     @GetMapping("/role")
     public String getRolesPage(Model model) {
-        List<Role> roleList = roleService.findAll();
-        roleList.forEach(RoleDto::toDto);
-        model.addAttribute("rolesList", roleList);
+        model.addAttribute("rolesList", roleService.findAll().stream().map(RoleDto::toDto).toList());
         return "get-roles-page";
     }
 
@@ -38,14 +41,17 @@ public class RoleController {
 
     @GetMapping("/role/add")
     public String addRolePage(Model model) {
-        List<Role> roleList = roleService.findAll();
-        roleList.forEach(RoleDto::toDto);
-        model.addAttribute("rolesList", roleList);
+        model.addAttribute("rolesList", roleService.findAll().stream().map(RoleDto::toDto).toList());
+        model.addAttribute("roleDto", new RoleDto());
         return "add-role-page";
     }
 
     @PostMapping("/role/add")
-    public String postAddRolePage(RoleDto roleDto) {
+    public String postAddRolePage(@Valid RoleDto roleDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("rolesList", roleService.findAll().stream().map(RoleDto::toDto).toList());
+            return "add-role-page";
+        }
         roleService.create(RoleDto.fromDto(roleDto));
         return "redirect:/role/add";
     }
@@ -55,9 +61,7 @@ public class RoleController {
         Optional<Role> roleFromBD = roleService.findById(id);
         if (roleFromBD.isPresent()) {
             model.addAttribute("role", RoleDto.toDto(roleFromBD.get()));
-            List<Role> roleList = roleService.findAll();
-            roleList.forEach(RoleDto::toDto);
-            model.addAttribute("rolesList", roleList);
+            model.addAttribute("rolesList", roleService.findAll().stream().map(RoleDto::toDto).toList());
             return "edit-role-page";
         }
         return "404";
@@ -80,9 +84,7 @@ public class RoleController {
         Optional<Role> roleFromBD = roleService.findById(id);
         if (roleFromBD.isPresent()) {
             model.addAttribute("role", RoleDto.toDto(roleFromBD.get()));
-            List<Role> roleList = roleService.findAll();
-            roleList.forEach(RoleDto::toDto);
-            model.addAttribute("rolesList", roleList);
+            model.addAttribute("rolesList", roleService.findAll().stream().map(RoleDto::toDto).toList());
             return "delete-role-page";
         }
         return "404";

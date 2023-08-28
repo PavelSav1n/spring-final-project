@@ -28,7 +28,8 @@ public class HelloController {
 
     // We have to use @RequestMapping:
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/hello")
-    public String helloWithQueryParam(@RequestParam("param") String parameter) {
+    public String helloWithQueryParam(@RequestParam(value = "param", required = false) String parameter) {
+//        @RequestParam(required = false) -- in case we want to allow null in parameter
         return "Hello, this is param = " + parameter;
     }
 
