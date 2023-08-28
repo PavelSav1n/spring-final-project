@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ps.springfinalproject.domain.Role;
@@ -17,7 +15,6 @@ import ps.springfinalproject.rest.dto.UserDto;
 import ps.springfinalproject.services.RoleService;
 import ps.springfinalproject.services.UserService;
 
-//import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,11 +58,11 @@ public class UserController {
             model.addAttribute("roleDtoList", roleService.findAll().stream().map(RoleDto::toDto).toList());
             // UserDto() object is already in model, so we don't need to add it here to use th:field in "view"
 
-            if (userService.findByEmail(userDto.getEmail()).isPresent()){
-                result.rejectValue("email", null,"There is already an account registered with that email");
+            if (userService.findByEmail(userDto.getEmail()).isPresent()) {
+                result.rejectValue("email", null, "There is already an account registered with that email");
             }
-            if (!userDto.getPassword().equals(userDto.getPassword2())){
-                result.rejectValue("password2",null,"Passwords must match");
+            if (!userDto.getPassword().equals(userDto.getPassword2())) {
+                result.rejectValue("password2", null, "Passwords must match");
             }
 
             Map<String, Object> model1 = result.getModel();
