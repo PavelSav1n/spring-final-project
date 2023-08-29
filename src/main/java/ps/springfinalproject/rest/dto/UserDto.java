@@ -19,7 +19,7 @@ public class UserDto {
 
     private String id;
     @NotBlank(message = "Name is required") // (not to be just white spaces)
-    @Size(min = 2, max = 50, message = "Message must be between 2 and 50 characters.")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters.")
     private String name;
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email. Try again.")

@@ -56,7 +56,7 @@ public class RoleController {
     public String editRolePage(@PathVariable("id") long id, Model model) {
         Optional<Role> roleFromBD = roleService.findById(id);
         if (roleFromBD.isPresent()) {
-            model.addAttribute("role", RoleDto.toDto(roleFromBD.get()));
+            model.addAttribute("roleDto", RoleDto.toDto(roleFromBD.get()));
             model.addAttribute("rolesList", roleService.findAll().stream().map(RoleDto::toDto).toList());
             return "edit-role-page";
         }
@@ -65,7 +65,12 @@ public class RoleController {
 
     // PathVariable "id" might be redundant here, because you can transfer different "id" via roleDto.
     @PostMapping("/role/{id}/edit")
-    public String postEditRolePage(@PathVariable("id") long id, RoleDto roleDto) {
+    public String postEditRolePage(@PathVariable("id") long id, @Valid RoleDto roleDto, BindingResult result, Model model) {
+        if (result.hasErrors()){
+            model.addAttribute("roleDto", roleDto);
+            model.addAttribute("rolesList", roleService.findAll().stream().map(RoleDto::toDto).toList());
+            return "edit-role-page";
+        }
         Optional<Role> roleFromBD = roleService.findById(Long.parseLong(roleDto.getId()));
         if (roleFromBD.isPresent()) {
             roleService.update(RoleDto.fromDto(roleDto));

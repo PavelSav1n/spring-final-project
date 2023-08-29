@@ -10,31 +10,31 @@
 <body>
 
 <!-- Menu -->
-<div th:replace="modules :: navigation"></div>
+<div th:replace="~{modules :: navigation}"></div>
 
 <!-- Form -->
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1 th:text="|Edit ${role.name} role:|">Edit role:</h1>
+        <h1 th:text="|Edit ${roleDto.name} role:|">Edit role:</h1>
 
-        <form id="add-role-form" th:action="@{/role/{id}/edit(id=${role.id})}" th:method="post"
+        <form id="add-role-form" th:action="@{/role/{id}/edit(id=${roleDto.id})}" th:method="post"
               action="edit-role-page.html">
             <div class="mb-3">
                 <label for="id-input">id:</label>
-                <input id="id-input" required readonly="readonly" name="id" type="text" th:value="${role.id}"
+                <input id="id-input" required readonly="readonly" name="id" type="text" th:value="${roleDto.id}"
                        class="formbold-form-input"/>
             </div>
             <div class="mb-3">
                 <label for="role-input">Role name:</label>
-                <input id="role-input" required name="name" type="text" th:value="${role.name}"
+                <input id="role-input" th:field="${roleDto.name}" th:value="${roleDto.name}"
                        class="formbold-form-input"/>
+                <p class="error" th:errors="${roleDto.name}"></p>
             </div>
             <!-- Buttons -->
             <input class="formbold-btn" type="submit" value="submit">
             <input class="formbold-btn" type="reset" value="reset">
+        </form>
     </div>
-    </form>
-</div>
 </div>
 
 <!-- Table -->
