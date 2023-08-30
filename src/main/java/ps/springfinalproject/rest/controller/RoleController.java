@@ -67,7 +67,8 @@ public class RoleController {
     @PostMapping("/role/{id}/edit")
     public String postEditRolePage(@PathVariable("id") long id, @Valid RoleDto roleDto, BindingResult result, Model model) {
         if (result.hasErrors()){
-            model.addAttribute("roleDto", roleDto);
+            // It seems like roleDto is already in the model.
+//            model.addAttribute("roleDto", roleDto);
             model.addAttribute("rolesList", roleService.findAll().stream().map(RoleDto::toDto).toList());
             return "edit-role-page";
         }
