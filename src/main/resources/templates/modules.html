@@ -13,6 +13,7 @@
 
 <body>
 
+<!-- MENU -->
 <div class="menu" th:fragment="navigation">
     <ul>
         <li><a href="/">home</a></li>
@@ -26,5 +27,61 @@
     </ul>
 </div>
 
+<!-- All Users Table -->
+<div th:fragment="allUsersTable">
+    <h1>List of all users:</h1>
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>id</th>
+            <th>name</th>
+            <th>email</th>
+            <th>password</th>
+            <th>date of birth</th>
+            <th>role</th>
+            <th>edit</th>
+            <th>delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="userDto:${userDtoList}">
+            <td th:text="${userDtoStat.count}">1</td>
+            <td th:text="${userDto.id}">123</td>
+            <td><a th:text="${userDto.name}" th:href="|/user/${userDto.id}|">Default user</a></td>
+            <td th:text="${userDto.email}">Default email</td>
+            <td th:text="${userDto.password}">Default password</td>
+            <td th:text="${userDto.birthDate}">Default birthdate</td>
+            <td><a th:text="${userDto.roleName}" th:href="|/role/${userDto.roleId}|">Default role</a></td>
+            <td><a th:href="|/user/${userDto.id}/edit|">edit</a></td>
+            <td><a th:href="|/user/${userDto.id}/delete|">delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!-- All Roles Table -->
+<div th:fragment="allRolesTable">
+    <h1>List of Roles:</h1>
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>id</th>
+            <th>name</th>
+            <th>edit</th>
+            <th>delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="roleElem:${rolesList}">
+            <td th:text="${roleElemStat.count}">1</td>
+            <td th:text="${roleElem.id}">123</td>
+            <td><a th:text="${roleElem.name}" th:href="|/role/${roleElem.id}|">Default role</a></td>
+            <td><a th:href="|/role/${roleElem.id}/edit|">edit</a></td>
+            <td><a th:href="|/role/${roleElem.id}/delete|">delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

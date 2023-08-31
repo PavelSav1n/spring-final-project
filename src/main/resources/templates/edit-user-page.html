@@ -86,41 +86,12 @@
     </div>
 </div>
 
-<!-- Table -->
+<!-- All Users Table -->
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1>
-            List of all users:
-        </h1>
 
-        <table class="styled-table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>id</th>
-                <th>name</th>
-                <th>email</th>
-                <th>password</th>
-                <th>date of birth</th>
-                <th>role</th>
-                <th>edit</th>
-                <th>delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="userDto:${userDtoList}">
-                <td th:text="${userDtoStat.count}">1</td>
-                <td th:text="${userDto.id}">123</td>
-                <td><a th:text="${userDto.name}" th:href="|/user/${userDto.id}|">Default user</a></td>
-                <td th:text="${userDto.email}">Default email</td>
-                <td th:text="${userDto.password}">Default password</td>
-                <td th:text="${userDto.birthDate}">Default birthdate</td>
-                <td><a th:text="${userDto.roleName}" th:href="|/role/${userDto.roleId}|">Default role</a></td>
-                <td><a th:href="|/user/${userDto.id}/edit|">edit</a></td>
-                <td><a th:href="|/user/${userDto.id}/delete|">delete</a></td>
-            </tr>
-            </tbody>
-        </table>
+        <div th:replace="~{modules :: allUsersTable}"></div>
+
         <!-- Buttons -->
         <div class="btns">
             <div class="btn-div"><a class="btn" href="/user">Back</a></div>
@@ -128,6 +99,7 @@
 
     </div>
 </div>
+
 <div><a href="/">Back</a></div>
 
 </body>
