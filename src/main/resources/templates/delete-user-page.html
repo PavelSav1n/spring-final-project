@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Delete user</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+<div th:replace="~{modules :: navigation}"></div>
+
+<!-- Form -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1 th:text="|'${userDto.name}' user delete confirmation:|">Delete user:</h1>
+
+        <form id="delete-user-form" th:action="@{/user/{id}/delete(id=${userDto.id})}" th:method="post"
+              action="delete-user-page.html">
+            <!-- id -->
+            <div class="mb-3">
+                <label for="id-input">id:</label>
+                <input id="id-input" required readonly="readonly"
+                       th:field="${userDto.id}"
+                       th:value="${userDto.id}"
+                       class="formbold-form-input"/>
+            </div>
+            <!-- name -->
+            <div class="mb-3">
+                <label for="user-name-input" class="form-label">Name:</label>
+                <input id="user-name-input" required readonly="readonly"
+                       th:field="${userDto.name}"
+                       th:value="${userDto.name}"
+                       class="formbold-form-input"/>
+            </div>
+            <!-- email -->
+            <div class="mb-3">
+                <label for="user-email-input" class="form-label">email:</label>
+                <input id="user-email-input" required readonly="readonly"
+                       th:field="${userDto.email}"
+                       th:value="${userDto.email}"
+                       class="formbold-form-input"/>
+            </div>
+            <!-- password -->
+            <div class="input-wrapp mb-3">
+                <label for="user-psw-input" class="form-label">Password:</label>
+                <div>
+                    <input id="user-psw-input" required readonly="readonly"
+                           type="password" name="password"
+                           th:value="${userDto.password}"
+                           class="formbold-form-input"/>
+
+                    <input id="user-psw2-input" required readonly="readonly"
+                           type="password" name="password2"
+                           th:value="${userDto.password}"
+                           class="formbold-form-input"/>
+                </div>
+            </div>
+            <!-- date of birth -->
+            <div class="mb-3">
+                <label for="user-bdate-input" class="form-label">Date of birth:</label>
+                <input id="user-bdate-input" required readonly="readonly"
+                       name="birthDate" type="date"
+                       class="formbold-form-input"/>
+            </div>
+            <!-- role -->
+            <div class="mb-3">
+                <label for="user-role-input" class="form-label">User role:</label>
+                <input id="user-role-input" required readonly="readonly"
+                       th:field="${userDto.roleName}"
+                       th:value="${userDto.roleName}"
+                       class="formbold-form-input"/>
+                <input hidden="hidden" required readonly="readonly"
+                       th:field="${userDto.roleId}"
+                       th:value="${userDto.roleId}"/>
+            </div>
+
+            <!-- Buttons -->
+            <input class="formbold-btn" type="submit" value="delete">
+        </form>
+    </div>
+</div>
+
+
+<!-- All users table -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+        <div th:replace="~{modules :: allUsersTable}"></div>
+
+        <!-- Buttons -->
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/user">Back</a></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -8,28 +8,20 @@
 <body>
 
 <!-- Menu -->
-<div th:replace="modules :: navigation"></div>
+<div th:replace="~{modules :: navigation}"></div>
 
-<h1>List of Categories:</h1>
+<div class="main-wrapper">
+    <div class="form-wrapper">
 
-<table class="styled-table">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>name</th>
-        <th>edit</th>
-        <th>delete</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="categoryDto:${categoryDtoList}">
-        <td th:text="${categoryDto.id}">123</td>
-        <td><a th:text="${categoryDto.name}" th:href="|/category/${categoryDto.id}|">Default category</a></td>
-        <td><a th:href="|/category/${categoryDto.id}/edit|">edit</a></td>
-        <td><a th:href="|/category/${categoryDto.id}/delete|">delete</a></td>
-    </tr>
-    </tbody>
-</table>
-<div><a href="/">Back</a></div>
+        <!-- All categories table -->
+        <div th:replace="~{modules :: allCategoriesTable}"></div>
+
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/">Back</a></div>
+            <div class="btn-div"><a class="btn" href="/category/add">Add new category</a></div>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>

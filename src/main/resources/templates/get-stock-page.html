@@ -10,28 +10,21 @@
 <body>
 
 <!-- Menu -->
-<div th:replace="modules :: navigation"></div>
+<div th:replace="~{modules :: navigation}"></div>
 
-<h1>Stock page:</h1>
 
-<table class="styled-table">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>product</th>
-        <th>amount</th>
-        <th>price</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="stockDto:${stockDtoList}">
-        <td th:text="${stockDto.id}">123213</td>
-        <td><a th:text="${stockDto.productName}" th:href="|/product/${stockDto.productId}|">Default product</a></td>
-        <td th:text="${stockDto.amount}">9999</td>
-        <td th:text="${stockDto.price}">999</td>
-    </tr>
-    </tbody>
-</table>
-<div><a href="/">Back</a></div>
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+        <!-- All Stock Table -->
+        <div th:replace="~{modules :: allStockTable}"></div>
+
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/">Back</a></div>
+            <div class="btn-div"><a class="btn" href="/stock/add">Add stock</a></div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

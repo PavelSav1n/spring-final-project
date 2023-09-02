@@ -14,7 +14,7 @@ import ps.springfinalproject.domain.User;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor // For passing model to view to use th:field
-@Accessors(chain = true) // For more convenient view of object creation.
+@Accessors(chain = true) // For more convenient view of object creation & tests.
 public class UserDto {
 
     private String id;
@@ -54,6 +54,17 @@ public class UserDto {
             userDto.id = "0";
         }
         long id = Long.parseLong(userDto.id);
-        return new User(id, userDto.name, userDto.email, userDto.password, userDto.birthDate, new Role(Long.parseLong(userDto.roleId), userDto.roleName));
+
+        System.out.println("USER : fromDto");
+        System.out.println("userDto.roleId = " + userDto.roleId);
+        System.out.println("userDto.roleName = " + userDto.roleName);
+
+        return new User(
+                id,
+                userDto.name,
+                userDto.email,
+                userDto.password,
+                userDto.birthDate,
+                new Role(Long.parseLong(userDto.roleId), userDto.roleName));
     }
 }

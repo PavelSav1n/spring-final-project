@@ -10,32 +10,36 @@
 <body>
 
 <!-- Menu -->
-<div th:replace="modules :: navigation"></div>
+<div th:replace="~{modules :: navigation}"></div>
 
-<h1 th:text="|'${userDto.name}' user details:|">User details:</h1>
-
-<table class="styled-table">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>name</th>
-        <th>email</th>
-        <th>password</th>
-        <th>date of birth</th>
-        <th>role</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td th:text="${userDto.id}">123</td>
-        <td th:text="${userDto.name}">Default name</td>
-        <td th:text="${userDto.email}">Default email</td>
-        <td th:text="${userDto.password}">Default password</td>
-        <td th:text="${userDto.birthDate}">Default birth date</td>
-        <td><a th:text="${userDto.roleName}" th:href="|/role/${userDto.roleId}|">Default role</a></td>
-    </tr>
-    </tbody>
-</table>
-<div><a href="/user">Back</a></div>
+<!-- User details -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1 th:text="|'${userDto.name}' user details:|">User details:</h1>
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>email</th>
+                <th>password</th>
+                <th>date of birth</th>
+                <th>role</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${userDto.id}">123</td>
+                <td th:text="${userDto.name}">Default name</td>
+                <td th:text="${userDto.email}">Default email</td>
+                <td th:text="${userDto.password}">Default password</td>
+                <td th:text="${userDto.birthDate}">Default birth date</td>
+                <td><a th:text="${userDto.roleName}" th:href="|/role/${userDto.roleId}|">Default role</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <div><a href="/user">Back</a></div>
+    </div>
+</div>
 </body>
 </html>

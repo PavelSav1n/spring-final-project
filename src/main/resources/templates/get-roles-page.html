@@ -10,34 +10,14 @@
 <body>
 
 <!-- Menu -->
-<div th:replace="modules :: navigation"></div>
-
-<!-- Table -->
+<div th:replace="~{modules :: navigation}"></div>
 
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1>List of Roles:</h1>
 
-        <table class="styled-table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>id</th>
-                <th>name</th>
-                <th>edit</th>
-                <th>delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="role:${rolesList}">
-                <td th:text="${roleStat.count}">1</td>
-                <td th:text="${role.id}">123</td>
-                <td><a th:text="${role.name}" th:href="|/role/${role.id}|">Default role</a></td>
-                <td><a th:href="|/role/${role.id}/edit|">edit</a></td>
-                <td><a th:href="|/role/${role.id}/delete|">delete</a></td>
-            </tr>
-            </tbody>
-        </table>
+        <!-- All roles table -->
+        <div th:replace="~{modules :: allRolesTable}"></div>
+
         <div class="btns">
             <div class="btn-div"><a class="btn" href="/">Back</a></div>
             <div class="btn-div"><a class="btn" href="/role/add">Add new role</a></div>

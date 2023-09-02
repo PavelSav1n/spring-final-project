@@ -14,7 +14,7 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(targetEntity = Product.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Product.class, cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id")
     private Product product;
 

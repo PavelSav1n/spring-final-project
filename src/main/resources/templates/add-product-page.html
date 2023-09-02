@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add new product</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+<div th:replace="~{modules :: navigation}"></div>
+
+<!-- Form -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1>Add new Product:</h1>
+
+        <form id="add-product-form" th:action="@{/product/add}" th:method="post" action="add-product-page.html">
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="product-name-input" class="form-label">Product name:</label>
+                <input id="product-name-input"
+                       th:field="${productDto.name}"
+                       value=""
+                       placeholder="Enter name of a product"
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${productDto.name}"></p>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+                <label for="product-category-input">Select product category:</label>
+                <select name="categoryId" size="1" class="formbold-form-input" id="product-category-input">
+                    <option value="" hidden>Select category</option>
+                    <option th:each="categoryElem:${categoryDtoList}"
+                            th:value="${categoryElem.id}"
+                            th:text="${categoryElem.name}"
+                            id="product-category-option"
+                            name="whatever">
+                </select>
+                <p class="error" th:errors="${productDto.categoryId}"></p>
+            </div>
+
+            <!-- imagePath -->
+            <div class="mb-3">
+                <label for="product-imagepath-input">Enter image path</label>
+                <input id="product-imagepath-input"
+                       th:field="${productDto.imagePath}"
+                       value=""
+                       placeholder="Select image for product"
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${productDto.imagePath}"></p>
+            </div>
+
+            <!-- imagePath -->
+            <div class="mb-3">
+                <label for="product-details-input">Enter details</label>
+                <input id="product-details-input"
+                       th:field="${productDto.details}"
+                       placeholder="Enter details"
+                       value=""
+                       class="formbold-form-input">
+                <p class="error" th:errors="${productDto.details}"></p>
+            </div>
+
+
+            <!-- Buttons -->
+            <input class="formbold-btn" type="submit" value="submit">
+            <input class="formbold-btn" type="reset" value="reset">
+
+        </form>
+    </div>
+</div>
+
+<!-- All products table -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+        <div th:replace="~{modules :: allProductsTable}"></div>
+
+        <!-- Buttons -->
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/product">Back</a></div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

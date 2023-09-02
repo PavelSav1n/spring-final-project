@@ -12,21 +12,28 @@
 <!-- Menu -->
 <div th:replace="modules :: navigation"></div>
 
-<h1 th:text="|'${categoryDto.name}' category details:|">Category details:</h1>
-<table class="styled-table">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td th:text="${categoryDto.id}">123</td>
-        <td th:text="${categoryDto.name}">Default category</td>
-    </tr>
-    </tbody>
-</table>
-<div><a href="/category">Back</a></div>
+<!-- Category details -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1 th:text="|'${categoryDto.name}' category details:|">Category details:</h1>
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${categoryDto.id}">123</td>
+                <td th:text="${categoryDto.name}">Default category</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div><a href="/category">Back</a></div>
+    </div>
+</div>
+
 </body>
 </html>

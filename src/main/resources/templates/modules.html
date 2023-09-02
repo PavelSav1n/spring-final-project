@@ -59,6 +59,7 @@
         </tbody>
     </table>
 </div>
+
 <!-- All Roles Table -->
 <div th:fragment="allRolesTable">
     <h1>List of Roles:</h1>
@@ -83,5 +84,89 @@
         </tbody>
     </table>
 </div>
+
+<!-- All Categories Table -->
+<div th:fragment="allCategoriesTable">
+    <h1>List of Categories:</h1>
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>edit</th>
+            <th>delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="categoryDto:${categoryDtoList}">
+            <td th:text="${categoryDto.id}">123</td>
+            <td><a th:text="${categoryDto.name}" th:href="|/category/${categoryDto.id}|">Default category</a></td>
+            <td><a th:href="|/category/${categoryDto.id}/edit|">edit</a></td>
+            <td><a th:href="|/category/${categoryDto.id}/delete|">delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- All Products Table -->
+<div th:fragment="allProductsTable">
+    <h1>List of Products:</h1>
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>category</th>
+            <th>image path</th>
+            <th>details</th>
+            <th>edit</th>
+            <th>delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="productDto:${productDtoList}">
+            <td th:text="${productDto.id}">123</td>
+            <td><a th:text="${productDto.name}" th:href="|/product/${productDto.id}|">Default product</a></td>
+            <td><a th:text="${productDto.categoryName}" th:href="|/category/${productDto.categoryId}|">Default
+                category</a>
+            </td>
+            <td th:text="${productDto.imagePath}">Default image path</td>
+            <td th:text="${productDto.details}">Default details</td>
+            <td><a th:href="|/product/${productDto.id}/edit|">edit</a></td>
+            <td><a th:href="|/product/${productDto.id}/delete|">delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- All Stock Table -->
+<div th:fragment="allStockTable">
+    <h1>Stock page:</h1>
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>product</th>
+            <th>amount</th>
+            <th>price</th>
+            <th>edit</th>
+            <th>delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="stockDto:${stockDtoList}">
+            <td th:text="${stockDto.id}">123213</td>
+            <td><a th:text="${stockDto.productName}" th:href="|/product/${stockDto.productId}|">Default product</a>
+            </td>
+            <td th:text="${stockDto.amount}">9999</td>
+            <td th:text="${stockDto.price}">999</td>
+            <td><a th:href="|/stock/${stockDto.id}/edit|">edit</a></td>
+            <td><a th:href="|/stock/${stockDto.id}/delete|">delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
 </body>
 </html>

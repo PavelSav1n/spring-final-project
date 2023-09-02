@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Add new role</title>
+    <title>Add new category</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 
@@ -15,14 +15,15 @@
 <!-- Form -->
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1>Add new Role:</h1>
+        <h1>Add new Category:</h1>
 
-        <form id="add-role-form" th:action="@{/role/add}" th:method="post" action="add-role-page.html">
+        <form id="add-category-form" th:action="@{/category/add}" th:method="post" action="add-category-page.html">
             <div class="mb-3">
-                <label for="role-name-input" class="form-label">Role name:</label>
-                <input id="role-name-input" th:field="${roleDto.name}" value="" class="formbold-form-input"/>
-                <p class="error" th:errors="${roleDto.name}"></p>
+                <label for="category-name-input" class="form-label">category name:</label>
+                <input id="category-name-input" th:field="${categoryDto.name}" value="" class="formbold-form-input"/>
+                <p class="error" th:errors="${categoryDto.name}"></p>
             </div>
+
             <!-- Buttons -->
             <input class="formbold-btn" type="submit" value="submit">
             <input class="formbold-btn" type="reset" value="reset">
@@ -31,15 +32,15 @@
     </div>
 </div>
 
-<!-- All roles table -->
+<!-- All categories table -->
 <div class="main-wrapper">
     <div class="form-wrapper">
 
-        <div th:replace="~{modules :: allRolesTable}"></div>
+        <div th:replace="~{modules :: allCategoriesTable}"></div>
 
         <!-- Buttons -->
         <div class="btns">
-            <div class="btn-div"><a class="btn" href="/role">Back</a></div>
+            <div class="btn-div"><a class="btn" href="/category">Back</a></div>
         </div>
 
     </div>

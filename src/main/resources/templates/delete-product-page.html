@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Delete product</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+<div th:replace="~{modules :: navigation}"></div>
+
+<!-- Form -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1 th:text="|'${productDto.name}' product delete confirmation:|">Delete product:</h1>
+
+        <form id="delete-product-form" th:action="@{/product/{id}/delete(id=${productDto.id})}" th:method="post"
+              action="delete-product-page.html">
+
+            <!-- ID -->
+            <div class="mb-3">
+                <label for="product-id-input" class="form-label">Product id:</label>
+                <input id="product-id-input"
+                       th:field="${productDto.id}"
+                       th:value="${productDto.id}"
+                       readonly="readonly" required
+                       class="formbold-form-input"/>
+            </div>
+
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="product-name-input" class="form-label">Product name:</label>
+                <input id="product-name-input"
+                       th:field="${productDto.name}"
+                       th:value="${productDto.name}"
+                       readonly="readonly" required
+                       class="formbold-form-input"/>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+                <label for="product-category-input">Product category</label>
+                <input id="product-category-input"
+                       th:field="${productDto.categoryName}"
+                       readonly="readonly" required
+                       class="formbold-form-input"/>
+                <label hidden="hidden">
+                    <input hidden="hidden" required readonly="readonly"
+                           th:field="${productDto.categoryId}"
+                           th:value="${productDto.categoryId}"/>
+                </label>
+            </div>
+
+            <!-- imagePath -->
+            <div class="mb-3">
+                <label for="product-imagepath-input">Enter image path</label>
+                <input id="product-imagepath-input"
+                       th:field="${productDto.imagePath}"
+                       th:value="${productDto.imagePath}"
+                       readonly="readonly" required
+                       class="formbold-form-input"/>
+            </div>
+
+            <!-- imagePath -->
+            <div class="mb-3">
+                <label for="product-details-input">Enter details</label>
+                <input id="product-details-input"
+                       th:field="${productDto.details}"
+                       th:value="${productDto.details}"
+                       readonly="readonly" required
+                       class="formbold-form-input">
+            </div>
+
+            <!-- Buttons -->
+            <input class="formbold-btn" type="submit" value="delete">
+        </form>
+    </div>
+</div>
+
+
+<!-- All products table -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+        <div th:replace="~{modules :: allProductsTable}"></div>
+
+        <!-- Buttons -->
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/user">Back</a></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

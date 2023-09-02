@@ -10,35 +10,21 @@
 <body>
 
 <!-- Menu -->
-<div th:replace="modules :: navigation"></div>
+<div th:replace="~{modules :: navigation}"></div>
 
-<h1>List of Products:</h1>
+<div class="main-wrapper">
+    <div class="form-wrapper">
 
-<table class="styled-table">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>name</th>
-        <th>category</th>
-        <th>image path</th>
-        <th>details</th>
-        <th>edit</th>
-        <th>delete</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="productDto:${productDtoList}">
-        <td th:text="${productDto.id}">123</td>
-        <td><a th:text="${productDto.name}" th:href="|/product/${productDto.id}|">Default product</a></td>
-        <td><a th:text="${productDto.categoryName}" th:href="|/category/${productDto.categoryId}|">Default category</a>
-        </td>
-        <td th:text="${productDto.imagePath}">Default image path</td>
-        <td th:text="${productDto.details}">Default details</td>
-        <td><a th:href="|/product/${productDto.id}/edit|">edit</a></td>
-        <td><a th:href="|/product/${productDto.id}/delete|">delete</a></td>
-    </tr>
-    </tbody>
-</table>
-<div><a href="/">Back</a></div>
+        <!-- All products table -->
+        <div th:replace="~{modules :: allProductsTable}"></div>
+
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/">Back</a></div>
+            <div class="btn-div"><a class="btn" href="/product/add">Add new product</a></div>
+        </div>
+
+    </div>
+</div>
+
 </body>
 </html>

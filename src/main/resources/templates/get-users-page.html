@@ -10,40 +10,14 @@
 <body>
 
 <!-- Menu -->
-<div th:replace="modules :: navigation"></div>
+<div th:replace="~{modules :: navigation}"></div>
 
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1>List of Users:</h1>
 
-        <table class="styled-table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>id</th>
-                <th>name</th>
-                <th>email</th>
-                <th>password</th>
-                <th>date of birth</th>
-                <th>role</th>
-                <th>edit</th>
-                <th>delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="userDto:${userDtoList}">
-                <td th:text="${userDtoStat.count}">1</td>
-                <td th:text="${userDto.id}">123</td>
-                <td><a th:text="${userDto.name}" th:href="|/user/${userDto.id}|">Default user</a></td>
-                <td th:text="${userDto.email}">Default email</td>
-                <td th:text="${userDto.password}">Default password</td>
-                <td th:text="${userDto.birthDate}">Default birth date</td>
-                <td><a th:text="${userDto.roleName}" th:href="|/role/${userDto.roleId}|">Default role</a></td>
-                <td><a th:href="|/user/${userDto.id}/edit|">edit</a></td>
-                <td><a th:href="|/user/${userDto.id}/delete|">delete</a></td>
-            </tr>
-            </tbody>
-        </table>
+        <!-- All users table -->
+        <div th:replace="~{modules :: allUsersTable}"></div>
+
         <div class="btns">
             <div class="btn-div"><a class="btn" href="/">Back</a></div>
             <div class="btn-div"><a class="btn" href="/user/add">Add new user</a></div>

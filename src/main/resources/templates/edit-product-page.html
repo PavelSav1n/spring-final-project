@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit new product</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+<div th:replace="~{modules :: navigation}"></div>
+
+<!-- Form -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1 th:text="|Edit product '${productDto.name}':|">Edit Product:</h1>
+
+        <form id="edit-product-form" th:action="@{/product/{id}/edit(id=${productDto.id})}" th:method="post"
+              action="edit-product-page.html">
+            <!-- ID -->
+            <div class="mb-3">
+                <label for="product-id-input" class="form-label">Product id:</label>
+                <input id="product-id-input"
+                       th:field="${productDto.id}"
+                       th:value="${productDto.id}"
+                       readonly="readonly"
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${productDto.id}"></p>
+            </div>
+
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="product-name-input" class="form-label">Product name:</label>
+                <input id="product-name-input"
+                       th:field="${productDto.name}"
+                       th:value="${productDto.name}"
+                       placeholder="Enter name of a product"
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${productDto.name}"></p>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+                <label for="product-category-input">Select product category:</label>
+                <select name="categoryId" size="1" class="formbold-form-input" id="product-category-input">
+                    <option th:text="${productDto.categoryName}" th:value="${productDto.categoryId}" hidden="hidden">
+                        Select category
+                    </option>
+                    <option th:each="categoryElem:${categoryDtoList}"
+                            th:value="${categoryElem.id}"
+                            th:text="${categoryElem.name}"
+                            id="product-category-option"
+                            name="whatever">
+                </select>
+                <p class="error" th:errors="${productDto.categoryId}"></p>
+                <!-- When we send form with errors, we receive that form back and there is no productDto.categoryName in it to show in select field. Code below allows it. -->
+                <label hidden="hidden">
+                    <input th:field="${productDto.categoryName}" value="${productDto.categoryName}" hidden="hidden"/>
+                </label>
+            </div>
+
+            <!-- imagePath -->
+            <div class="mb-3">
+                <label for="product-imagepath-input">Enter image path</label>
+                <input id="product-imagepath-input"
+                       th:field="${productDto.imagePath}"
+                       th:value="${productDto.imagePath}"
+                       placeholder="Select image for product"
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${productDto.imagePath}"></p>
+            </div>
+
+            <!-- imagePath -->
+            <div class="mb-3">
+                <label for="product-details-input">Enter details</label>
+                <input id="product-details-input"
+                       th:field="${productDto.details}"
+                       placeholder="Enter details"
+                       th:value="${productDto.details}"
+                       class="formbold-form-input">
+                <p class="error" th:errors="${productDto.details}"></p>
+            </div>
+
+
+            <!-- Buttons -->
+            <input class="formbold-btn" type="submit" value="submit">
+            <input class="formbold-btn" type="reset" value="reset">
+
+        </form>
+    </div>
+</div>
+
+<!-- All products table -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+        <div th:replace="~{modules :: allProductsTable}"></div>
+
+        <!-- Buttons -->
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/product">Back</a></div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

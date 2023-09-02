@@ -31,13 +31,13 @@ public class StockServiceImpl implements StockService {
     @Transactional(readOnly = true)
     @Override
     public Optional<Stock> findByProductId(long id) {
-        return findByProductId(id);
+        return stockRepository.findByProductId(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Stock> findByProduct(Product product) {
-        return findByProductId(product.getId());
+        return stockRepository.findByProductId(product.getId());
     }
 
     @Override

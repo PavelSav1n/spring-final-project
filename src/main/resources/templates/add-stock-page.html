@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add stock</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+<div th:replace="~{modules :: navigation}"></div>
+
+<!-- Form -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1>Add stock:</h1>
+
+        <form id="add-stock-form" th:action="@{/stock/add}" th:method="post" action="add-stock-page.html">
+            <!-- Product -->
+            <div class="mb-3">
+                <label for="stock-product-input">Select product:</label>
+                <select name="productId" size="1" class="formbold-form-input" id="stock-product-input">
+                    <option hidden="hidden" value="">Select product</option>
+                    <option th:each="productElem:${productDtoList}"
+                            th:text="${productElem.name}"
+                            th:value="${productElem.id}"
+                            id="stock-product-option"
+                            name="whatever"/>
+                </select>
+                <p class="error" th:errors="${stockDto.productId}"></p>
+            </div>
+
+            <!-- Amount -->
+            <div class="mb-3">
+                <label for="stock-amount-input">Enter amount:</label>
+                <input id="stock-amount-input"
+                       th:field="${stockDto.amount}"
+                       value=""
+                       placeholder="Enter amount"
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${stockDto.amount}"></p>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+                <label for="stock-price-input">Enter price:</label>
+                <input id="stock-price-input"
+                       th:field="${stockDto.price}"
+                       value=""
+                       placeholder="Enter price"
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${stockDto.price}"></p>
+            </div>
+
+            <!-- Buttons -->
+            <input class="formbold-btn" type="submit" value="submit">
+            <input class="formbold-btn" type="reset" value="reset">
+
+        </form>
+    </div>
+</div>
+
+<!-- All stock table -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+        <div th:replace="~{modules :: allStockTable}"></div>
+
+        <!-- Buttons -->
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/stock">Back</a></div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

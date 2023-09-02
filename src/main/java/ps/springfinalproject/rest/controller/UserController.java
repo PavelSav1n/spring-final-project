@@ -136,6 +136,7 @@ public class UserController {
 
     @PostMapping("user/{id}/delete")
     public String postDeleteUserPage(UserDto userDto) {
+        System.out.println("userDto.getRoleId() = " + userDto.getRoleId());
         Optional<User> userFromBD = userService.findById(Long.parseLong(userDto.getId()));
         if (userFromBD.isPresent()) {
             userService.delete(userFromBD.get());

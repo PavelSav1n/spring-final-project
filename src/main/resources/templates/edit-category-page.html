@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Edit role</title>
+    <title>Edit category</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 
@@ -15,20 +15,20 @@
 <!-- Form -->
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1 th:text="|Edit ${roleDto.name} role:|">Edit role:</h1>
+        <h1 th:text="|Edit ${categoryDto.name} category:|">Edit category:</h1>
 
-        <form id="add-role-form" th:action="@{/role/{id}/edit(id=${roleDto.id})}" th:method="post"
-              action="edit-role-page.html">
+        <form id="edit-category-form" th:action="@{/category/{id}/edit(id=${categoryDto.id})}" th:method="post"
+              action="edit-category-page.html">
             <div class="mb-3">
                 <label for="id-input">id:</label>
-                <input id="id-input" required readonly="readonly" name="id" type="text" th:value="${roleDto.id}"
+                <input id="id-input" required readonly="readonly" name="id" type="text" th:value="${categoryDto.id}"
                        class="formbold-form-input"/>
             </div>
             <div class="mb-3">
-                <label for="role-input">Role name:</label>
-                <input id="role-input" th:field="${roleDto.name}" th:value="${roleDto.name}"
+                <label for="category-input">Category name:</label>
+                <input id="category-input" th:field="${categoryDto.name}" th:value="${categoryDto.name}"
                        class="formbold-form-input"/>
-                <p class="error" th:errors="${roleDto.name}"></p>
+                <p class="error" th:errors="${categoryDto.name}"></p>
             </div>
             <!-- Buttons -->
             <input class="formbold-btn" type="submit" value="submit">
@@ -37,15 +37,15 @@
     </div>
 </div>
 
-<!-- All roles table -->
+<!-- All categories table -->
 <div class="main-wrapper">
     <div class="form-wrapper">
 
-        <div th:replace="~{modules :: allRolesTable}"></div>
+        <div th:replace="~{modules :: allCategoriesTable}"></div>
 
         <!-- Buttons -->
         <div class="btns">
-            <div class="btn-div"><a class="btn" href="/role">Back</a></div>
+            <div class="btn-div"><a class="btn" href="/category">Back</a></div>
         </div>
     </div>
 </div>
