@@ -15,7 +15,6 @@ import ps.springfinalproject.rest.dto.StockDto;
 import ps.springfinalproject.services.ProductService;
 import ps.springfinalproject.services.StockService;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -49,7 +48,8 @@ public class StockController {
         Optional<Stock> stockFromBD = stockService.findByProductId(Long.parseLong(stockDto.getProductId()));
 
         if (stockFromBD.isPresent()) { // Checking if this product is already in stock
-            result.rejectValue("productId", null, "This product is already in stock.");
+            stockDto.setProductName(productService.findById(Long.parseLong(stockDto.getProductId())).get().getName());
+            result.rejectValue("productId", null, stockDto.getProductName() + " is already in stock.");
             model.addAttribute("stockDtoList", stockService.findAll().stream().map(StockDto::toDto).toList());
             model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
             return "add-stock-page";
@@ -69,6 +69,7 @@ public class StockController {
         if (stockFromBD.isPresent()) {
             model.addAttribute("stockDto", StockDto.toDto(stockFromBD.get()));
             model.addAttribute("stockDtoList", stockService.findAll().stream().map(StockDto::toDto).toList());
+            model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
             return "edit-stock-page";
         }
         return "404";
@@ -78,15 +79,53 @@ public class StockController {
     public String postEditStockPage(@Valid StockDto stockDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("stockDtoList", stockService.findAll().stream().map(StockDto::toDto).toList());
+            model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
+            return "edit-stock-page";
+        }
+        Optional<Stock> stockProductDuplicate = stockService.findByProductId(Long.parseLong(stockDto.getProductId()));
+
+        // Ошибка, если сток с таким продуктом есть и этот дубликат не текущий сток.
+        if (stockProductDuplicate.isPresent() && stockProductDuplicate.get().getId() != Long.parseLong(stockDto.getId())) { // Checking if this product is already in stock & this product not the current product
+            result.rejectValue("productId", null, productService.findById(Long.parseLong(stockDto.getProductId())).get().getName() + " is already in stock.");
+            model.addAttribute("stockDtoList", stockService.findAll().stream().map(StockDto::toDto).toList());
+            model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
             return "edit-stock-page";
         }
         Optional<Stock> stockFromBD = stockService.findById(Long.parseLong(stockDto.getId()));
         if (stockFromBD.isPresent()) {
-            stockService.update(StockDto.fromDto(stockDto));
+            Optional<Product> productFromBD = productService.findById(Long.parseLong(stockDto.getProductId()));
+            Stock stockToBeSaved = StockDto.fromDto(stockDto);
+            stockToBeSaved.setProduct(productFromBD.get());
+            stockService.update(stockToBeSaved);
             return "redirect:/stock";
         }
         return "404";
     }
 
+    @GetMapping("stock/{id}/delete")
+    public String deleteStockPage(@PathVariable("id") long id, Model model) {
+        Optional<Stock> stockFromBD = stockService.findById(id);
+        if (stockFromBD.isPresent()) {
+            model.addAttribute("stockDto", StockDto.toDto(stockFromBD.get()));
+            System.out.println("StockDto.toDto(stockFromBD.get()) = " + StockDto.toDto(stockFromBD.get()));
+            model.addAttribute("stockDtoList", stockService.findAll().stream().map(StockDto::toDto).toList());
+            model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
+            return "delete-stock-page";
+        }
+        return "404";
+    }
+
+    @PostMapping("stock/{id}/delete")
+    public String postDeleteStockPage(StockDto stockDto) {
+        System.out.println("stockDto = " + stockDto);
+        Optional<Stock> stockFromBD = stockService.findById(Long.parseLong(stockDto.getId()));
+        System.out.println("stockFromBD = " + stockFromBD);
+        System.out.println("Deleting stock... " + StockDto.fromDto(stockDto)); // debug
+        if (stockFromBD.isPresent()) {
+            stockService.delete(stockFromBD.get());
+            return "redirect:/stock";
+        }
+        return "404";
+    }
 
 }

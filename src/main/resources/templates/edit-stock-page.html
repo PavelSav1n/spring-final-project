@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Add stock</title>
+    <title>Edit stock</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 
@@ -15,9 +15,21 @@
 <!-- Form -->
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1>Add stock:</h1>
+        <h1 th:text="|Edit ${stockDto.productName} stock:|">Edit role:</h1>
 
-        <form id="add-stock-form" th:action="@{/stock/add}" th:method="post" action="add-stock-page.html">
+        <form id="add-role-form" th:action="@{/stock/{id}/edit(id=${stockDto.id})}" th:method="post"
+              action="edit-role-page.html">
+            <!-- ID -->
+            <div class="mb-3">
+                <label for="stock-id-input">ID:</label>
+                <input id="stock-id-input"
+                       th:field="${stockDto.id}"
+                       th:value="${stockDto.id}"
+                       readonly="readonly" required
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${stockDto.id}"></p>
+            </div>
+
             <!-- Product -->
             <div class="mb-3">
                 <label for="stock-product-input">Select product:</label>
@@ -42,7 +54,7 @@
                 <label for="stock-amount-input">Enter amount:</label>
                 <input id="stock-amount-input"
                        th:field="${stockDto.amount}"
-                       value=""
+                       th:value="${stockDto.amount}"
                        placeholder="Enter amount"
                        class="formbold-form-input"/>
                 <p class="error" th:errors="${stockDto.amount}"></p>
@@ -53,7 +65,7 @@
                 <label for="stock-price-input">Enter price:</label>
                 <input id="stock-price-input"
                        th:field="${stockDto.price}"
-                       value=""
+                       th:value="${stockDto.price}"
                        placeholder="Enter price"
                        class="formbold-form-input"/>
                 <p class="error" th:errors="${stockDto.price}"></p>
@@ -62,12 +74,11 @@
             <!-- Buttons -->
             <input class="formbold-btn" type="submit" value="submit">
             <input class="formbold-btn" type="reset" value="reset">
-
         </form>
     </div>
 </div>
 
-<!-- All stock table -->
+<!-- All roles table -->
 <div class="main-wrapper">
     <div class="form-wrapper">
 
@@ -75,9 +86,8 @@
 
         <!-- Buttons -->
         <div class="btns">
-            <div class="btn-div"><a class="btn" href="/stock">Back</a></div>
+            <div class="btn-div"><a class="btn" href="/role">Back</a></div>
         </div>
-
     </div>
 </div>
 

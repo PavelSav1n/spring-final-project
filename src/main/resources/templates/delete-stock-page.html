@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title>Add stock</title>
+    <title>Stock role</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 
@@ -15,25 +16,33 @@
 <!-- Form -->
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1>Add stock:</h1>
+        <h1 th:text="|'${stockDto.productName}' stock delete confirmation:|">Delete role:</h1>
 
-        <form id="add-stock-form" th:action="@{/stock/add}" th:method="post" action="add-stock-page.html">
+        <form id="delete-role-form" th:action="@{/stock/{id}/delete(id=${stockDto.id})}" th:method="post"
+              action="delete-role-page.html">
+            <!-- ID -->
+            <div class="mb-3">
+                <label for="stock-id-input">ID:</label>
+                <input id="stock-id-input"
+                       th:field="${stockDto.id}"
+                       th:value="${stockDto.id}"
+                       readonly="readonly" required
+                       class="formbold-form-input"/>
+            </div>
+
             <!-- Product -->
             <div class="mb-3">
                 <label for="stock-product-input">Select product:</label>
-                <select name="productId" size="1" class="formbold-form-input" id="stock-product-input">
-                    <option hidden="hidden" th:text="${stockDto.productName}" th:value="${stockDto.productId}">Select
-                        product
-                    </option>
-                    <option th:each="productElem:${productDtoList}"
-                            th:text="${productElem.name}"
-                            th:value="${productElem.id}"
-                            id="stock-product-option"
-                            name="whatever"/>
-                </select>
-                <p class="error" th:errors="${stockDto.productId}"></p>
+                <input id="stock-product-input"
+                       th:field="${stockDto.productName}"
+                       th:value="${stockDto.productName}"
+                       class="formbold-form-input"
+                       readonly="readonly" required>
                 <label hidden="hidden">
-                    <input hidden="hidden" th:field="${stockDto.productName}" th:value="${stockDto.productName}"/>
+                    <input hidden="hidden"
+                           th:field="${stockDto.productId}"
+                           th:value="${stockDto.productId}"
+                           readonly="readonly"/>
                 </label>
             </div>
 
@@ -42,10 +51,9 @@
                 <label for="stock-amount-input">Enter amount:</label>
                 <input id="stock-amount-input"
                        th:field="${stockDto.amount}"
-                       value=""
-                       placeholder="Enter amount"
+                       th:value="${stockDto.amount}"
+                       readonly="readonly" required
                        class="formbold-form-input"/>
-                <p class="error" th:errors="${stockDto.amount}"></p>
             </div>
 
             <!-- Price -->
@@ -53,21 +61,19 @@
                 <label for="stock-price-input">Enter price:</label>
                 <input id="stock-price-input"
                        th:field="${stockDto.price}"
-                       value=""
-                       placeholder="Enter price"
+                       th:value="${stockDto.price}"
+                       readonly="readonly" required
                        class="formbold-form-input"/>
-                <p class="error" th:errors="${stockDto.price}"></p>
             </div>
 
             <!-- Buttons -->
-            <input class="formbold-btn" type="submit" value="submit">
-            <input class="formbold-btn" type="reset" value="reset">
-
+            <input class="formbold-btn" type="submit" value="delete">
         </form>
     </div>
 </div>
+</div>
 
-<!-- All stock table -->
+<!-- All roles table -->
 <div class="main-wrapper">
     <div class="form-wrapper">
 
@@ -77,7 +83,6 @@
         <div class="btns">
             <div class="btn-div"><a class="btn" href="/stock">Back</a></div>
         </div>
-
     </div>
 </div>
 
