@@ -27,6 +27,9 @@ public class OrderDto {
     }
 
     public static Order fromDto(OrderDto orderDto) {
+        if (orderDto.id == null) {
+            orderDto.id = "0";
+        }
         long id = Long.parseLong(orderDto.id);
         // TODO: 18.08.2023 Написать нормальный список OrderDetails. Пока не понятно, как мы будем передавать данные.
 
