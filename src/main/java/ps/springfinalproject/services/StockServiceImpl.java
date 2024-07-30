@@ -40,6 +40,7 @@ public class StockServiceImpl implements StockService {
         return stockRepository.findByProductId(product.getId());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Stock> findAll() {
         return stockRepository.findAll();

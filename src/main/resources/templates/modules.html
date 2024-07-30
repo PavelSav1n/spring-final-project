@@ -116,6 +116,7 @@
         <tr>
             <th>id</th>
             <th>name</th>
+            <th>price</th>
             <th>category</th>
             <th>image path</th>
             <th>details</th>
@@ -127,6 +128,7 @@
         <tr th:each="productDto:${productDtoList}">
             <td th:text="${productDto.id}">123</td>
             <td><a th:text="${productDto.name}" th:href="|/product/${productDto.id}|">Default product</a></td>
+            <td th:text="|${productDto.price}$|">99.00</td>
             <td><a th:text="${productDto.categoryName}" th:href="|/category/${productDto.categoryId}|">Default
                 category</a>
             </td>
@@ -167,7 +169,7 @@
     </table>
 </div>
 
-<!-- All products table -->
+<!-- All Orders table -->
 <div th:fragment="allOrdersTable">
     <h1>List of all orders:</h1>
     <table class="styled-table">

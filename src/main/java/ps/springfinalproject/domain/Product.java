@@ -14,6 +14,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    private double price;
 
     @ManyToOne(targetEntity = Category.class, cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id")

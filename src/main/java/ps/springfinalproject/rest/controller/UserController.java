@@ -104,6 +104,7 @@ public class UserController {
             model.addAttribute("roleDtoList", roleService.findAll().stream().map(RoleDto::toDto).toList());
 
             // TODO: psw double check
+            //TODO: Insert field validation like in postAddUserPage
 
             return "edit-user-page";
         }

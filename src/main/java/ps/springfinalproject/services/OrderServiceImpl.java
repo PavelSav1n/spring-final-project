@@ -34,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAllByUser(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Order> findAll() {
         return orderRepository.findAll();

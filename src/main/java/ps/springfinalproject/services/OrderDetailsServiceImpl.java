@@ -33,6 +33,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
         return orderDetailsRepository.findAllByOrderId(orderId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<OrderDetails> findAll() {
         return orderDetailsRepository.findAll();

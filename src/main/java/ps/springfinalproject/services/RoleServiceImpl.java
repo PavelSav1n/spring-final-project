@@ -33,6 +33,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByName(name);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Role> findAll() {
         return roleRepository.findAll();

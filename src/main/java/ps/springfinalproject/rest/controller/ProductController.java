@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ps.springfinalproject.domain.Product;
+import ps.springfinalproject.domain.Stock;
 import ps.springfinalproject.rest.dto.CategoryDto;
 import ps.springfinalproject.rest.dto.ProductDto;
 import ps.springfinalproject.services.CategoryService;
 import ps.springfinalproject.services.ProductService;
+import ps.springfinalproject.services.StockService;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final StockService stockService;
 
     @GetMapping("/product")
     public String getProductsPage(Model model) {
@@ -35,7 +38,11 @@ public class ProductController {
     public String getProductPage(@PathVariable long id, Model model) {
         Optional<Product> productFromBD = productService.findById(id);
         if (productFromBD.isPresent()) {
-            model.addAttribute("productDto", ProductDto.toDto(productFromBD.get()));
+            ProductDto productDto = ProductDto.toDto(productFromBD.get());
+            // Check, whether this product is in stock:
+            if (stockService.findByProductId(id).isPresent())
+                productDto.setAmountInStock(String.valueOf(stockService.findByProductId(id).get().getAmount())); // Setting correct stocks for product
+            model.addAttribute("productDto", productDto);
             return "get-product-page";
         }
         return "404";
@@ -49,6 +56,8 @@ public class ProductController {
         return "add-product-page";
     }
 
+    // Adding new product to DB and adding zero stock for it to stock table
+    // TODO: remove price from stock. Now it lives at Product domain
     @PostMapping("/product/add")
     public String postAddProductPage(@Valid ProductDto productDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -56,7 +65,9 @@ public class ProductController {
             model.addAttribute("categoryDtoList", categoryService.findAll().stream().map(CategoryDto::toDto).toList());
             return "add-product-page";
         }
-        productService.create(ProductDto.fromDto(productDto));
+        Product product = ProductDto.fromDto(productDto);
+        productService.create(product);
+        stockService.create(new Stock(productService.findById(product.getId()).get(), 0, 0)); // Creating product will create default stock for it
         return "redirect:/product";
     }
 
@@ -74,7 +85,7 @@ public class ProductController {
 
     @PostMapping("product/{id}/edit")
     public String postEditProductPage(@Valid ProductDto productDto, BindingResult result, Model model) {
-        if (result.hasErrors()) {
+        if (result.hasErrors()) { // errors are checked in dtos via @jakarta validation annotations
             model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
             model.addAttribute("categoryDtoList", categoryService.findAll().stream().map(CategoryDto::toDto).toList());
             return "edit-product-page";

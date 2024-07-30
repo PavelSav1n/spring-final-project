@@ -41,6 +41,17 @@
                 <p class="error" th:errors="${productDto.name}"></p>
             </div>
 
+            <!-- Price -->
+            <div class="mb-3">
+                <label for="product-price-input" class="form-label">Product price:</label>
+                <input id="product-price-input"
+                       th:field="${productDto.price}"
+                       th:value="${productDto.price}"
+                       placeholder="Enter price of a product"
+                       class="formbold-form-input"/>
+                <p class="error" th:errors="${productDto.price}"></p>
+            </div>
+
             <!-- Category -->
             <div class="mb-3">
                 <label for="product-category-input">Select product category:</label>

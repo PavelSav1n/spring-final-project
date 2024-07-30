@@ -46,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllByCategoryId(category.getId());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Product> findAll() {
         return productRepository.findAll();

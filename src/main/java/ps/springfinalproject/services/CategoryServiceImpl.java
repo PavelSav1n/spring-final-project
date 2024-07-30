@@ -33,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByName(name);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Category> findAll() {
         return categoryRepository.findAll();
