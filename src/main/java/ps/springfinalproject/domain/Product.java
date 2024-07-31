@@ -32,7 +32,7 @@ public class Product {
         this.imagePath = imagePath;
         this.details = details;
     }
-    // For Dto dependencies:
+    // For StockDto dependencies:
     public Product(long id, String name) {
         this.id = id;
         this.name = name;

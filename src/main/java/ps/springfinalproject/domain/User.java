@@ -18,10 +18,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-//    @NotBlank(message = "Name is required") // (not to be just white spaces)
+    //    @NotBlank(message = "Name is required") // (not to be just white spaces)
 //    @Size(min = 2, max = 50, message = "Message must be between 2 and 50 characters.")
     private String name;
-//    @NotBlank(message = "Email is required")
+    //    @NotBlank(message = "Email is required")
 //    @Email(message = "Invalid email. Try again.")
     private String email;
     private String password;
@@ -39,5 +39,11 @@ public class User {
         this.password = password;
         this.birthDate = birthDate;
         this.role = role;
+    }
+
+    // For OrderDto (toDto). Other fields don't matter because we are using only id and name
+    public User(long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }

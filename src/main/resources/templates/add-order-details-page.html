@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add order details</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+<div th:replace="~{modules :: navigation}"></div>
+
+<!-- Form -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1>Add order details:</h1>
+
+        <form id="add-stock-form" th:action="@{/order-details/add}" th:method="post"
+              action="add-order-details-page.html">
+            <table>
+                <!-- Order -->
+                <div class="mb-3">
+                    <label for="order-details-input">Select order:</label>
+
+                    <select name="orderId" size="1" class="formbold-form-input" id="order-details-input">
+                        <option hidden="hidden" th:text="${orderDetailsDto.orderId}"
+                                th:value="${orderDetailsDto.orderId}">
+                            <!-- ID values will be preserved -->
+                            Select order ID
+                        </option>
+                        <option th:each="orderElem:${orderDtoList}"
+                                th:text="|Order #${orderElem.id} from ${orderElem.getUserName()}|"
+                                th:value="${orderElem.id}"
+                                id="order-id-option"
+                                name="whatever"/>
+                    </select>
+                    <!--
+                    <input field="Potat"
+                           th:value="${orderDetailsDto.orderId}" hidden="hidden"/>
+                    <p class="error" th:errors="${orderDetailsDto.orderId}"></p>
+                    -->
+                    <!--
+                    Q: For some reason this field saves its state after an error. ANSWER: It is preserved because it is DTO which persists after we POST data
+                    I think I won't bother with this fields check. I let them stay blank as they are, without setting its correct names.
+                    <label hidden="hidden">
+                        <input hidden="hidden" th:field="${orderDetailsDto.orderId}"
+                               th:value="${orderDetailsDto.orderId}"/>
+                    </label>
+                    -->
+                </div>
+
+                <!-- Product -->
+                <div class="mb-3">
+                    <label for="order-details-product-input">Select product:</label>
+                    <select name="productId" size="1" class="formbold-form-input" id="order-details-product-input">
+                        <option hidden="hidden" th:text="${orderDetailsDto.productName}"
+                                th:value="${orderDetailsDto.productId}">Select
+                            product
+                        </option>
+                        <option th:each="productElem:${productDtoList}"
+                                th:text="${productElem.name}"
+                                th:value="${productElem.id}"
+                                id="stock-product-option"
+                                name="whatever"/>
+                    </select>
+                    <p class="error" th:errors="${orderDetailsDto.productId}"></p>
+                    <label hidden="hidden">
+                        <input hidden="hidden" th:field="${orderDetailsDto.productName}"
+                               th:value="${orderDetailsDto.productName}"/>
+                    </label>
+                </div>
+
+                <!-- Amount -->
+                <div class="mb-3">
+                    <label for="order-details-amount-input">Enter amount:</label>
+                    <input id="order-details-amount-input"
+                           name="amount"
+                           th:field="${orderDetailsDto.amount}"
+                           value=""
+                           placeholder="Enter amount"
+                           class="formbold-form-input"/>
+                    <p class="error" th:errors="${orderDetailsDto.amount}"></p>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-3">
+                    <label for="stock-price-input">Enter price:</label>
+                    <input id="stock-price-input"
+                           name="price"
+                           th:field="${orderDetailsDto.price}"
+                           value=""
+                           placeholder="Enter price"
+                           class="formbold-form-input"/>
+                    <p class="error" th:errors="${orderDetailsDto.price}"></p>
+                </div>
+            </table>
+
+            <!-- Buttons -->
+            <input class="formbold-btn" type="submit" value="submit">
+            <input class="formbold-btn" type="reset" value="reset">
+
+        </form>
+    </div>
+</div>
+
+<!-- All order details table -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+        <div th:replace="~{modules :: allOrderDetailsTable}"></div>
+
+        <!-- Buttons -->
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/order-details">Back</a></div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

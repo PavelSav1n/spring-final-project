@@ -17,25 +17,25 @@
     <div class="form-wrapper">
         <h1 th:text="|Edit user ${userDto.name}:|">Edit user:</h1>
 
-        <form id="add-user-form" th:action="@{/user/{id}/edit(id=${userDto.id})}" th:method="post"
+        <form id="edit-user-form" th:action="@{/user/{id}/edit(id=${userDto.id})}" th:method="post"
               action="edit-user-page.html">
             <!-- id -->
             <div class="mb-3">
                 <label for="id-input">id:</label>
-                <input id="id-input" required readonly="readonly" th:filed="${userDto.id}" th:value="${userDto.id}"
+                <input id="id-input" name="id" required readonly="readonly" th:field="${userDto.id}" th:value="${userDto.id}"
                        class="formbold-form-input"/>
             </div>
             <!-- name -->
             <div class="mb-3">
                 <label for="user-name-input" class="form-label">Name:</label>
-                <input id="user-name-input" th:field="${userDto.name}" th:value="${userDto.name}"
+                <input id="user-name-input" name="name" th:field="${userDto.name}" th:value="${userDto.name}"
                        placeholder="Enter username" class="formbold-form-input"/>
                 <p class="error" th:errors="${userDto.name}"></p>
             </div>
             <!-- email -->
             <div class="mb-3">
                 <label for="user-email-input" class="form-label">email:</label>
-                <input id="user-email-input" th:field="${userDto.email}" th:value="${userDto.email}"
+                <input id="user-email-input" name="email" th:field="${userDto.email}" th:value="${userDto.email}"
                        placeholder="Enter email"
                        class="formbold-form-input"/>
                 <p class="error" th:errors="${userDto.email}"></p>
@@ -74,7 +74,7 @@
                     </option>
                 </select>
                 <!-- When we send form with errors, we receive that form back and there is no userDto.roleName in that form to show in select field. Code below allows it. -->
-                <input th:field="${userDto.roleName}" value="${userDto.roleName}" hidden/>
+                <input th:field="${userDto.roleName}" th:value="${userDto.roleName}" hidden/>
 
                 <p class="error" th:errors="${userDto.roleId}"></p>
             </div>

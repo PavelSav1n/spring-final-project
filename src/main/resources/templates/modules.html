@@ -217,23 +217,50 @@
         </tbody>
     </table>
 
-    <script>
-        const coll = document.getElementsByClassName("collapsible");
-        let i;
+    <!-- All OrderDetails table -->
+    <div th:fragment="allOrderDetailsTable">
+        <h1>List of order details:</h1>
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>order_id</th>
+                <th>product</th>
+                <th>amount</th>
+                <th>price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderDetailDto:${orderDetailsDtoList}">
+                <td th:text="${orderDetailDto.id}">999</td>
+                <td th:text="${orderDetailDto.orderId}">999</td>
+                <td><a th:text="${orderDetailDto.productName}" th:href="|/product/${orderDetailDto.productId}|">Default
+                    product</a>
+                </td>
+                <td th:text="${orderDetailDto.amount}">999</td>
+                <td th:text="${orderDetailDto.price}">999</td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:fragment="allOrdersTable">
 
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function () {
-                this.classList.toggle("active");
-                const content = this.nextElementSibling;
-                if (content.style.display === "block") {
-                    content.style.display = "none";
-                } else {
-                    content.style.display = "block";
+            <script>
+                const coll = document.getElementsByClassName("collapsible");
+                let i;
+
+                for (i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        const content = this.nextElementSibling;
+                        if (content.style.display === "block") {
+                            content.style.display = "none";
+                        } else {
+                            content.style.display = "block";
+                        }
+                    });
                 }
-            });
-        }
-    </script>
+            </script>
 
-</div>
+        </div>
 </body>
 </html>

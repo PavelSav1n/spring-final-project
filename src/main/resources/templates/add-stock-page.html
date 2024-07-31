@@ -22,7 +22,7 @@
             <div class="mb-3">
                 <label for="stock-product-input">Select product:</label>
                 <select name="productId" size="1" class="formbold-form-input" id="stock-product-input">
-                    <option hidden="hidden" th:text="${stockDto.productName}" th:value="${stockDto.productId}">Select
+                    <option th:text="${stockDto.productName}" th:value="${stockDto.productId}">Select
                         product
                     </option>
                     <option th:each="productElem:${productDtoList}"
@@ -31,10 +31,11 @@
                             id="stock-product-option"
                             name="whatever"/>
                 </select>
+                <!--<label hidden="hidden">
+                    <input hidden="hidden" th:field="${stockDto.productName}" th:value="${stockDto.productId}"/>
+                </label>-->
                 <p class="error" th:errors="${stockDto.productId}"></p>
-                <label hidden="hidden">
-                    <input hidden="hidden" th:field="${stockDto.productName}" th:value="${stockDto.productName}"/>
-                </label>
+
             </div>
 
             <!-- Amount -->

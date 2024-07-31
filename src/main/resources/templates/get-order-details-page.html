@@ -10,29 +10,21 @@
 <body>
 
 <!-- Menu -->
-<div th:replace="modules :: navigation"></div>
+<div th:replace="~{modules :: navigation}"></div>
 
-<h1>List of order details:</h1>
-<table class="styled-table">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>order_id</th>
-        <th>product</th>
-        <th>amount</th>
-        <th>price</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="orderDetailDto:${orderDetailsDtoList}">
-        <td th:text="${orderDetailDto.id}">999</td>
-        <td th:text="${orderDetailDto.orderId}">999</td>
-        <td><a th:text="${orderDetailDto.productName}" th:href="|/product/${orderDetailDto.productId}|">Default product</a>
-        </td>
-        <td th:text="${orderDetailDto.amount}">999</td>
-        <td th:text="${orderDetailDto.price}">999</td>
-    </tr>
-    </tbody>
-</table>
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+
+        <!-- All categories table -->
+        <div th:replace="~{modules :: allOrderDetailsTable}"></div>
+
+
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/">Back</a></div>
+            <div class="btn-div"><a class="btn" href="/order-details/add">Add new order detail</a></div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

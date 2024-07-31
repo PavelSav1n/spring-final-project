@@ -3,6 +3,7 @@ package ps.springfinalproject.rest.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ps.springfinalproject.domain.Order;
+import ps.springfinalproject.domain.User;
 
 import java.util.List;
 
@@ -31,8 +32,9 @@ public class OrderDto {
             orderDto.id = "0";
         }
         long id = Long.parseLong(orderDto.id);
+
         // TODO: 18.08.2023 Написать нормальный список OrderDetails. Пока не понятно, как мы будем передавать данные.
 
-        return null;
+        return new Order(id, orderDto.orderDate, new User(Long.parseLong(orderDto.userId), orderDto.userName), 0);
     }
 }

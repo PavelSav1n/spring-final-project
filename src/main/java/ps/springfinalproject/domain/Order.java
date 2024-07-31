@@ -44,6 +44,14 @@ public class Order {
         this.cost = cost;
     }
 
+    // Constructor for UPDATE
+    public Order(long id, String orderDate, User user, double cost) {
+        this.id = id;
+        this.orderDate = orderDate;
+        this.user = user;
+        this.cost = cost;
+    }
+
 
     public Order(long id, User user, List<OrderDetails> orderDetails, double cost) {
         this.id = id;

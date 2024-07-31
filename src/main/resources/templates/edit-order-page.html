@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit order</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<!-- Menu -->
+<div th:replace="~{modules :: navigation}"></div>
+
+<!-- Form -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1 th:text="|Edit order ${orderDto.id}:|">Edit order:</h1>
+
+        <form id="edit-order-form" th:action="@{/order/{id}/edit(id=${orderDto.id})}" th:method="post"
+              action="edit-order-page.html">
+            <!-- id -->
+            <div class="mb-3">
+                <label for="id-input">id:</label>
+                <input id="id-input" required readonly="readonly" th:filed="${orderDto.id}" th:value="${orderDto.id}"
+                       class="formbold-form-input"/>
+            </div>
+            <!-- order date -->
+            <div class="mb-3">
+                <label for="order-date-input" class="form-label">Order date:</label>
+                <input id="order-date-input" th:field="${orderDto.orderDate}" th:value="${orderDto.orderDate}"
+                       placeholder="Enter username" class="formbold-form-input"/>
+                <p class="error" th:errors="${orderDto.orderDate}"></p>
+            </div>
+            <!-- user -->
+            <div class="mb-3">
+                <label for="user-input">Select user:</label>
+                <select name="userId" size="1" class="formbold-form-input" id="user-input">
+                    <option hidden="hidden" th:text="${orderDto.userName}" th:value="${orderDto.userId}">Select
+                        user
+                    </option>
+                    <option th:each="userElem:${userDtoList}"
+                            th:text="${userElem.name}"
+                            th:value="${userElem.id}"
+                            id="user-option"
+                            name="whatever"/>
+                </select>
+                <p class="error" th:errors="${orderDto.userId}"></p>
+                <label hidden="hidden">
+                    <input hidden="hidden" th:field="${orderDto.userName}" th:value="${orderDto.userName}"/>
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <table class="styled-table">
+                    <tr>
+                        <th>id</th>
+                        <th>order_id</th>
+                        <th>product</th>
+                        <th>amount</th>
+                        <th>price</th>
+                    </tr>
+                    <tr th:each="elem:${orderDto.orderDetailsDtoList}">
+                        <td th:text="${elem.id}"></td>
+                        <td th:text="${elem.orderId}"></td>
+                        <td th:text="${elem.productName}"></td>
+                        <td th:text="${elem.amount}"></td>
+                        <td th:text="${elem.price}"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Buttons -->
+            <input class="formbold-btn" type="submit" value="submit">
+            <input class="formbold-btn" type="reset" value="reset">
+        </form>
+    </div>
+</div>
+
+<!-- All Orders Table -->
+<div class="main-wrapper">
+    <div class="form-wrapper">
+
+        <div th:replace="~{modules :: allOrdersTable}"></div>
+
+        <!-- Buttons -->
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/user">Back</a></div>
+        </div>
+
+    </div>
+</div>
+
+<div><a href="/">Back</a></div>
+
+</body>
+</html>

@@ -31,7 +31,9 @@ public class StockController {
 
     @GetMapping("stock/add")
     public String addStockPage(Model model) {
-        model.addAttribute("stockDto", new StockDto());
+        StockDto stockDto = new StockDto();
+        System.out.println("stockDto = " + stockDto);
+        model.addAttribute("stockDto", stockDto);
         model.addAttribute("stockDtoList", stockService.findAll().stream().map(StockDto::toDto).toList());
         model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
         return "add-stock-page";
@@ -39,8 +41,17 @@ public class StockController {
 
     @PostMapping("stock/add")
     public String postAddStockPage(@Valid StockDto stockDto, BindingResult result, Model model) {
+        if (result.hasErrors()) { // Checking basic restriction errors which defined in annotations in DTOs.
 
-        if (result.hasErrors()) { // Checking basic restriction errors
+            // When we add new stock (or other new entity) there are nulls in fields inside stockDto.
+            // After we POST some data this fields becomes populated with these data if there are no errors regarding these fields.
+            // But some fields, like names of products, usernames and other data, which we store in SQL in IDs cannot be filled, because they exist only in DTOs.
+            // So we must do it explicitly. I won't add this mechanics everywhere for now. Just for example.
+            if (stockDto.getProductId() != null){ // checking whether product field is filled
+                Optional<Product> productFromBD = productService.findById(Long.parseLong(stockDto.getProductId())); // find this product in BD
+                productFromBD.ifPresent(product -> stockDto.setProductName(product.getName())); // setting correct name to DTO field
+            }
+            System.out.println("POSTstockDto = " + stockDto);
             model.addAttribute("stockDtoList", stockService.findAll().stream().map(StockDto::toDto).toList());
             model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
             return "add-stock-page";

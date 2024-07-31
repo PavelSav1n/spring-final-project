@@ -1,9 +1,6 @@
 package ps.springfinalproject.rest.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +21,9 @@ public class ProductDto {
     private String name;
     @DecimalMin(value = "0.00", message = "Price must be decimal format. For example: '10.55'")
     private String price;
-    private String amountForOrder;
+    @Positive(message="Amount must be positive")
+    @Digits(integer = 5, fraction = 0, message="Amount must be an integer value, not more than 5 digit long")
+    private String amountToOrder;
     private String amountInStock;
     @NotBlank(message = "Category is required.")
     private String categoryId;
