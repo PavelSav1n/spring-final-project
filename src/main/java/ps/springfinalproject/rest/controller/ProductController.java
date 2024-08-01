@@ -43,26 +43,13 @@ public class ProductController {
             if (stockService.findByProductId(id).isPresent())
                 productDto.setAmountInStock(String.valueOf(stockService.findByProductId(id).get().getAmount())); // Setting correct stocks for product
             model.addAttribute("productDto", productDto);
+            System.out.println("productDto = " + productDto);
             return "get-product-page";
         }
         return "404";
     }
 
-    //TODO:*********************************************************************************************
-    // Это на будущее, если я захочу изменять данные прямо в таблице.
-    @PostMapping("/product/{id}")
-    public String postGetProductPage(@PathVariable long id, Model model) {
-        Optional<Product> productFromBD = productService.findById(id);
-        if (productFromBD.isPresent()) {
-            ProductDto productDto = ProductDto.toDto(productFromBD.get());
-            // Check, whether this product is in stock:
-            if (stockService.findByProductId(id).isPresent())
-                productDto.setAmountInStock(String.valueOf(stockService.findByProductId(id).get().getAmount())); // Setting correct stocks for product
-            model.addAttribute("productDto", productDto);
-            return "get-product-page";
-        }
-        return "404";
-    }
+
 
     @GetMapping("/product/add")
     public String addProductPage(Model model) {

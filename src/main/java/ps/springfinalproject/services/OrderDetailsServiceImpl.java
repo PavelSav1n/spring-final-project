@@ -62,4 +62,12 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     public void delete(OrderDetails orderDetails) {
         orderDetailsRepository.delete(orderDetails);
     }
+
+    @Transactional
+    @Override
+    public void deleteById(long id) {
+        orderDetailsRepository.deleteById(id);
+    }
+
+
 }

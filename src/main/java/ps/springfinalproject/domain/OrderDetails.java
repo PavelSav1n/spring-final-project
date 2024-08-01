@@ -1,10 +1,11 @@
 package ps.springfinalproject.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ps.springfinalproject.services.OrderDetailsService;
 
 @Entity(name = "order_details")
 @Data
@@ -31,7 +32,7 @@ public class OrderDetails {
     private int amount;
     private double price;
 
-    public OrderDetails(long orderId, Product product, int amount, double price) {
+    public OrderDetails(long orderId, Product product, @Positive(message = "Amount must be positive") @Digits(integer = 5, fraction = 0, message = "Amount must be an integer value, not more than 5 digit long") int amount, double price) {
         this.orderId = orderId;
         this.product = product;
         this.amount = amount;

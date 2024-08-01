@@ -23,4 +23,6 @@ public interface OrderDetailsService {
     OrderDetails update(OrderDetails orderDetails);
 
     void delete(OrderDetails orderDetails);
+
+    void deleteById(long id);
 }

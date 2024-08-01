@@ -15,17 +15,35 @@
 <!-- Form -->
 <div class="main-wrapper">
     <div class="form-wrapper">
-        <h1>Add order details:</h1>
+        <h1>Edit order details:</h1>
 
-        <form id="add-order-details-form" th:action="@{/order-details/add}" th:method="post"
+        <form id="add-order-details-form" th:action="@{/order-details/{id}/edit(id=${orderDetailsDto.getId()})}" th:method="post"
               action="add-order-details-page.html">
+
             <table>
+                <!-- ID -->
+                <div class="mb-3">
+                    <label for="order-details-id-input">ID or order detail:</label>
+                    <input id="order-details-id-input"
+                           th:field="${orderDetailsDto.id}"
+                           th:value="${orderDetailsDto.id}"
+                           readonly="readonly" required
+                           class="formbold-form-input"/>
+                    <p class="error" th:errors="${orderDetailsDto.id}"></p>
+                </div>
+
                 <!-- Order -->
+                <!-- th:with can define vars in this <div> and allows reusing variables defined in the same attribute.
+                In orid var "-1" is needed because .get() receives elem not by its ID but by its index.
+                Well that was stupid because we can delete an order and next new one will be incremented skipping deleted one and in the list there will be no skips in INDEX
+
+                <div class="mb-3" th:with="orid=${orderDetailsDto.orderId}-1, username=${orderDtoList.get(orid).getId()}">
+                 -->
                 <div class="mb-3">
                     <label for="order-details-input">Select order:</label>
 
                     <select name="orderId" size="1" class="formbold-form-input" id="order-details-input">
-                        <option hidden="hidden" th:text="|Order #${orderDetailsDto.orderId} from ${orderDetailsDto.userName}"
+                        <option hidden="hidden" th:text="|Order #${orderDetailsDto.orderId} from ${orderDetailsDto.userName}|"
                                 th:value="${orderDetailsDto.orderId}">
                             <!-- ID values will be preserved -->
                             Select order ID
@@ -37,11 +55,6 @@
                                 name="whatever"/>
                     </select>
                     <p class="error" th:errors="${orderDetailsDto.orderId}"></p>
-
-                    <!--
-                    Q: For some reason this field saves its state after an error. ANSWER: It is preserved because it is DTO which persists thanks to Thymeleaf after we POST data
-                    Just added some fields in DTO witch we populate with correct data in controller after the POST
-                    -->
                 </div>
 
                 <!-- Product -->
@@ -67,7 +80,7 @@
                     <input id="order-details-amount-input"
                            name="amount"
                            th:field="${orderDetailsDto.amount}"
-                           value=""
+                           th:value="${orderDetailsDto.amount}"
                            placeholder="Enter amount"
                            class="formbold-form-input"/>
                     <p class="error" th:errors="${orderDetailsDto.amount}"></p>
@@ -79,11 +92,16 @@
                     <input id="stock-price-input"
                            name="price"
                            th:field="${orderDetailsDto.price}"
-                           value=""
+                           th:value="${orderDetailsDto.price}"
                            placeholder="Enter price"
                            class="formbold-form-input"/>
                     <p class="error" th:errors="${orderDetailsDto.price}"></p>
                 </div>
+
+                <!-- Other DTO fields we need -->
+                <input hidden="hidden" name="productName" th:value="${orderDetailsDto.productName}">
+                <input hidden="hidden" name="userName" th:value="${orderDetailsDto.userName}">
+
             </table>
 
             <!-- Buttons -->

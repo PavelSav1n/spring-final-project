@@ -31,6 +31,8 @@ public class Order {
 
     private double cost;
 
+    private boolean temp;
+
     // Constructor with orderDetails list (cannot be created in persist before orderDetails, which requires order.id from persist).
     public Order(User user, List<OrderDetails> orderDetails, double cost) {
         this.user = user;
@@ -42,6 +44,12 @@ public class Order {
     public Order(User user, double cost) {
         this.user = user;
         this.cost = cost;
+    }
+
+    // Constructor for creating Temp Order in persist:
+    public Order(User user, boolean temp) {
+        this.user = user;
+        this.temp = temp;
     }
 
     // Constructor for UPDATE

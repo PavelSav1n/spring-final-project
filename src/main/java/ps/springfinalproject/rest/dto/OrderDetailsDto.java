@@ -19,12 +19,14 @@ public class OrderDetailsDto {
     private String orderId;
     private String productId;
     private String productName;
-    @Positive(message="Amount must be positive")
-    @Digits(integer = 5, fraction = 0, message="Amount must be an integer value, not more than 5 digit long")
+    private String userName; // for convenient display in VIEW
+    @Positive(message = "Amount must be positive")
+    @Digits(integer = 5, fraction = 0, message = "Amount must be an integer value, not more than 5 digit long")
     private String amount;
     @NotBlank(message = "Enter price")
     @DecimalMin(value = "1.00", message = "Price must be decimal format. For example: '10.55'")
     private String price;
+    private String temp;
 
     public static OrderDetailsDto toDto(OrderDetails orderDetails) {
         String id = String.valueOf(orderDetails.getId());
@@ -34,11 +36,11 @@ public class OrderDetailsDto {
         String amount = String.valueOf(orderDetails.getAmount());
         String price = String.valueOf(orderDetails.getPrice());
 
-        return new OrderDetailsDto(id, orderId, productId, productName, amount, price);
+        return new OrderDetailsDto(id, orderId, productId, productName, null, amount, price, "0");
     }
 
     public static OrderDetails fromDto(OrderDetailsDto orderDetailsDto) {
-        if (orderDetailsDto.id == null){
+        if (orderDetailsDto.id == null) {
             orderDetailsDto.id = "0";
         }
         long id = Long.parseLong(orderDetailsDto.id);

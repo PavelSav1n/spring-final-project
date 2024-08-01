@@ -15,6 +15,7 @@ import ps.springfinalproject.rest.dto.ProductDto;
 import ps.springfinalproject.services.OrderDetailsService;
 import ps.springfinalproject.services.OrderService;
 import ps.springfinalproject.services.ProductService;
+import ps.springfinalproject.services.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,15 +46,28 @@ public class OrderDetailsController {
     @PostMapping("/order-details/add")
     public String postAddOrderDetailsPage(@Valid OrderDetailsDto orderDetailsDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
+
+            System.out.println("orderDetailsDto = " + orderDetailsDto);
+            // Setting info DTO fields without checking isPresent() in BD. Might be issues.
+            if (!orderDetailsDto.getProductId().isEmpty()) {
+                System.out.println("prod");
+                orderDetailsDto.setProductName(productService.findById(Long.parseLong(orderDetailsDto.getProductId())).get().getName());
+            }
+            if (!orderDetailsDto.getOrderId().isEmpty()) {
+                System.out.println("ordID");
+                orderDetailsDto.setUserName(orderService.findById(Long.parseLong(orderDetailsDto.getOrderId())).get().getUser().getName());
+            }
+
+
             model.addAttribute("orderDetailsDtoList", orderDetailsService.findAll().stream().map(OrderDetailsDto::toDto).toList());
             model.addAttribute("orderDtoList", orderService.findAll().stream().map(OrderDto::toDto).toList());
             model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
+
+
             return "add-order-details-page";
         }
-        System.out.println("orderDetailsDto = " + orderDetailsDto);
         OrderDetails orderDetailsToBeSaved = OrderDetailsDto.fromDto(orderDetailsDto);
-        System.out.println("orderDetailsToBeSaved = " + orderDetailsToBeSaved);
-        orderDetailsToBeSaved.setProduct(productService.findById(orderDetailsToBeSaved.getProduct().getId()).get()); // without isPresent check
+        orderDetailsToBeSaved.setProduct(productService.findById(orderDetailsToBeSaved.getProduct().getId()).get()); // setting product without isPresent check
         orderDetailsService.create(orderDetailsToBeSaved);
         return "redirect:/order-details";
     }
@@ -70,11 +84,52 @@ public class OrderDetailsController {
     public String editOrderDetailsPage(@PathVariable long id, Model model) {
         Optional<OrderDetails> orderDetailsFromBD = orderDetailsService.findById(id);
         if (orderDetailsFromBD.isPresent()) {
-            model.addAttribute("orderDetailsDto", OrderDetailsDto.toDto(orderDetailsFromBD.get()));
+            OrderDetailsDto orderDetailsDto = OrderDetailsDto.toDto(orderDetailsFromBD.get());
+            orderDetailsDto.setUserName(orderService.findById(orderDetailsFromBD.get().getOrderId()).get().getUser().getName()); // setting userName to orderDetails DTO
+            model.addAttribute("orderDetailsDto", orderDetailsDto);
+
+            System.out.println("orderDetailsDto = " + orderDetailsDto); // sending fully set orderDetails DTO
+
+            // sending only details from this order:
+            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(orderDetailsFromBD.get().getOrderId()).stream().map(OrderDetailsDto::toDto).toList());
             model.addAttribute("orderDtoList", orderService.findAll().stream().map(OrderDto::toDto).toList());
-            model.addAttribute("productList", productService.findAll().stream().map(ProductDto::toDto).toList());
+            model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
+
             return "edit-order-details-page";
         }
         return "404";
     }
+
+    @PostMapping("/order-details/{id}/edit")
+    public String postEditOrderDetailsPage(@Valid OrderDetailsDto orderDetailsDto, BindingResult result, Model model) {
+
+        System.out.println("POSTorderDetailsDto = " + orderDetailsDto);
+        // if we don't have input tags in View for all our DTO fields they will return as null here
+        // So we must add those fields in View in order to preserve them.
+
+        if (result.hasErrors()) {
+            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAll().stream().map(OrderDetailsDto::toDto).toList());
+            model.addAttribute("orderDtoList", orderService.findAll().stream().map(OrderDto::toDto).toList());
+            model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
+            return "edit-order-details-page";
+        }
+
+        model.addAttribute("orderDetailsDtoList", orderDetailsService.findAll().stream().map(OrderDetailsDto::toDto).toList());
+
+        OrderDetails orderDetailsToBeSaved = OrderDetailsDto.fromDto(orderDetailsDto);
+        orderDetailsToBeSaved.setProduct(productService.findById(orderDetailsToBeSaved.getProduct().getId()).get()); // setting Product from persist
+        orderDetailsService.update(orderDetailsToBeSaved);
+
+        return "redirect:/order-details";
+    }
+
+    // Deleting just by ID in URL path
+    @GetMapping("order-details/{id}/delete")
+    public String deleteOrderDetails(@PathVariable long id) {
+        if (orderDetailsService.findById(id).isPresent()) {
+            orderDetailsService.deleteById(id);
+        }
+        return "redirect:/order-details";
+    }
+
 }
