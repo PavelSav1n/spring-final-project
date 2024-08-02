@@ -21,7 +21,7 @@ public class OrderDto {
         String id = String.valueOf(order.getId());
         String userId = String.valueOf(order.getUser().getId());
         String userName = order.getUser().getName();
-        List<OrderDetailsDto> orderDetailsDtoList = order.getOrderDetails().stream().map(OrderDetailsDto::toDto).toList();
+        List<OrderDetailsDto> orderDetailsDtoList = order.getOrderDetailsList().stream().map(OrderDetailsDto::toDto).toList();
         String cost = String.valueOf(order.getCost());
 
         return new OrderDto(id, order.getOrderDate(), userId, userName, orderDetailsDtoList, cost);

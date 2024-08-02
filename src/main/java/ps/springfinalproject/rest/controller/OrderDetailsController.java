@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ps.springfinalproject.domain.OrderDetails;
+import ps.springfinalproject.domain.Product;
 import ps.springfinalproject.rest.dto.OrderDetailsDto;
 import ps.springfinalproject.rest.dto.OrderDto;
 import ps.springfinalproject.rest.dto.ProductDto;
@@ -76,6 +77,7 @@ public class OrderDetailsController {
     @GetMapping("/order-details/{id}")
     public String getOrderDetailsPage(@PathVariable long id, Model model) {
         Optional<OrderDetails> orderDetailsFromBD = orderDetailsService.findById(id);
+        System.out.println("orderDetailsFromBD.get() = " + orderDetailsFromBD.get());
         orderDetailsFromBD.ifPresent(orderDetails -> model.addAttribute("orderDetailsDto", OrderDetailsDto.toDto(orderDetails)));
         return "get-order-details-page";
     }
@@ -85,13 +87,13 @@ public class OrderDetailsController {
         Optional<OrderDetails> orderDetailsFromBD = orderDetailsService.findById(id);
         if (orderDetailsFromBD.isPresent()) {
             OrderDetailsDto orderDetailsDto = OrderDetailsDto.toDto(orderDetailsFromBD.get());
-            orderDetailsDto.setUserName(orderService.findById(orderDetailsFromBD.get().getOrderId()).get().getUser().getName()); // setting userName to orderDetails DTO
+            orderDetailsDto.setUserName(orderService.findById(orderDetailsFromBD.get().getOrder().getId()).get().getUser().getName()); // setting userName to orderDetails DTO
             model.addAttribute("orderDetailsDto", orderDetailsDto);
 
             System.out.println("orderDetailsDto = " + orderDetailsDto); // sending fully set orderDetails DTO
 
             // sending only details from this order:
-            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(orderDetailsFromBD.get().getOrderId()).stream().map(OrderDetailsDto::toDto).toList());
+            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(orderDetailsFromBD.get().getOrder().getId()).stream().map(OrderDetailsDto::toDto).toList());
             model.addAttribute("orderDtoList", orderService.findAll().stream().map(OrderDto::toDto).toList());
             model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
 
@@ -102,11 +104,9 @@ public class OrderDetailsController {
 
     @PostMapping("/order-details/{id}/edit")
     public String postEditOrderDetailsPage(@Valid OrderDetailsDto orderDetailsDto, BindingResult result, Model model) {
-
         System.out.println("POSTorderDetailsDto = " + orderDetailsDto);
         // if we don't have input tags in View for all our DTO fields they will return as null here
         // So we must add those fields in View in order to preserve them.
-
         if (result.hasErrors()) {
             model.addAttribute("orderDetailsDtoList", orderDetailsService.findAll().stream().map(OrderDetailsDto::toDto).toList());
             model.addAttribute("orderDtoList", orderService.findAll().stream().map(OrderDto::toDto).toList());
@@ -115,9 +115,11 @@ public class OrderDetailsController {
         }
 
         model.addAttribute("orderDetailsDtoList", orderDetailsService.findAll().stream().map(OrderDetailsDto::toDto).toList());
-
         OrderDetails orderDetailsToBeSaved = OrderDetailsDto.fromDto(orderDetailsDto);
-        orderDetailsToBeSaved.setProduct(productService.findById(orderDetailsToBeSaved.getProduct().getId()).get()); // setting Product from persist
+        Product productFromDB = productService.findById(orderDetailsToBeSaved.getProduct().getId()).get();
+        orderDetailsToBeSaved.setProduct(productFromDB); // setting Product from persist
+        orderDetailsToBeSaved.setPrice(productFromDB.getPrice() * orderDetailsToBeSaved.getAmount()); // setting correct price according to product price and amount in orderDetails
+
         orderDetailsService.update(orderDetailsToBeSaved);
 
         return "redirect:/order-details";

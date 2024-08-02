@@ -15,6 +15,8 @@ public interface OrderService {
 
     List<Order> findAllByUser(User user);
 
+    Optional<Order> findTempByUser(User user);
+
     List<Order> findAll();
 
     void printAll();

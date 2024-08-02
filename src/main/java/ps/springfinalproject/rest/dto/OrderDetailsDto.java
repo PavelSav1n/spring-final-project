@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ps.springfinalproject.domain.Order;
 import ps.springfinalproject.domain.OrderDetails;
 import ps.springfinalproject.domain.Product;
 
@@ -30,7 +31,7 @@ public class OrderDetailsDto {
 
     public static OrderDetailsDto toDto(OrderDetails orderDetails) {
         String id = String.valueOf(orderDetails.getId());
-        String orderId = String.valueOf(orderDetails.getOrderId());
+        String orderId = String.valueOf(orderDetails.getOrder().getId());
         String productId = String.valueOf(orderDetails.getProduct().getId());
         String productName = orderDetails.getProduct().getName();
         String amount = String.valueOf(orderDetails.getAmount());
@@ -48,6 +49,6 @@ public class OrderDetailsDto {
         int amount = Integer.parseInt(orderDetailsDto.amount);
         double price = Double.parseDouble(orderDetailsDto.price);
 
-        return new OrderDetails(id, orderId, new Product(Long.parseLong(orderDetailsDto.productId), orderDetailsDto.productName), amount, price);
+        return new OrderDetails(id, new Order(orderId), new Product(Long.parseLong(orderDetailsDto.productId), orderDetailsDto.productName), amount, price);
     }
 }

@@ -17,7 +17,6 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     @Transactional
     @Override
     public OrderDetails create(OrderDetails orderDetails) {
-        System.out.println("creating orderDetails... " + orderDetails);
         return orderDetailsRepository.save(orderDetails);
     }
 

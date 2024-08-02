@@ -2,7 +2,6 @@ package ps.springfinalproject.rest.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -77,7 +76,7 @@ public class OrderController {
             Optional<User> userFromPersist = userService.findById(orderToBeUpdated.getUser().getId());
             userFromPersist.ifPresent(orderToBeUpdated::setUser);
             // Also need to set orderDetails. Now it's just from orderDetails table.
-            orderToBeUpdated.setOrderDetails(orderDetailsService.findAllByOrderId(orderToBeUpdated.getId()));
+            orderToBeUpdated.setOrderDetailsList(orderDetailsService.findAllByOrderId(orderToBeUpdated.getId()));
             orderService.update(orderToBeUpdated);
             return "redirect:/order";
         }
@@ -98,26 +97,78 @@ public class OrderController {
 
         // DefaultUser while we don't have any authorisation:
         User defaultUser = userService.findById(2L).get();
-        Order tempOrderToBeCreated = new Order(defaultUser, true);
-        Order tempOrderFromPersist = orderService.create(tempOrderToBeCreated); // getting order with ID
-        Optional<Product> productFromBD = productService.findById(Long.parseLong(productDto.getId()));
 
-        int amount = Integer.parseInt(productDto.getAmountToOrder());
-        double price = productFromBD.get().getPrice() * amount;
-        OrderDetails tempOrderDetails = new OrderDetails(tempOrderFromPersist.getId(), productService.findById(Long.parseLong(productDto.getId())).get(), amount, price);
-
-        OrderDetails tempOrderDetailsFromPersist = orderDetailsService.create(tempOrderDetails);
-
-        System.out.println("tempOrderDetailsFromPersist = " + tempOrderDetailsFromPersist);
-        System.out.println("amount = " + amount);
-        System.out.println("price = " + price);
-        System.out.println("tempOrderDetails = " + tempOrderDetails);
+        System.out.println("defaultUser = " + defaultUser);
+        System.out.println("orderService.findTempByUser(defaultUser) = " + orderService.findTempByUser(defaultUser));
 
         // We need just to add into a list new OrderDetails rows.
         // So that we keep previous data until order becomes permanent.
+        // We will set permanent state to order somewhere else.
+
+        // There are two case scenarios:
+        Optional<Order> tempOrderFromDB = orderService.findTempByUser(defaultUser);
+
+        // 1. There is an order in DB already
+        if (tempOrderFromDB.isPresent()) {
+
+            System.out.println("TEMP ORDER FOUND!");
+
+            List<OrderDetails> tempOrderDetailsListFromDB = orderDetailsService.findAllByOrderId(tempOrderFromDB.get().getId());
+
+            Optional<Product> productFromDB = productService.findById(Long.parseLong(productDto.getId()));
 
 
-        System.out.println("productDto = " + productDto);
+            int amount = Integer.parseInt(productDto.getAmountToOrder());
+            double price = productFromDB.get().getPrice() * amount;
+
+            System.out.println("PUSHING TEMP OD INTO PERSIST");
+            OrderDetails tempOrderDetails = new OrderDetails(tempOrderFromDB.get(), productFromDB.get(), amount, price);
+            OrderDetails tempOrderDetailsFromDB = orderDetailsService.create(tempOrderDetails);
+
+            // Sum of all OD elems prices
+            System.out.println("SUMMING ELEMS");
+            for (OrderDetails elem : tempOrderDetailsListFromDB) {
+                price += elem.getPrice();
+            }
+            tempOrderDetailsListFromDB.add(tempOrderDetailsFromDB); // adding OD to ODList
+            tempOrderFromDB.get().setOrderDetailsList(tempOrderDetailsListFromDB); // setting ODList to Order
+            tempOrderFromDB.get().setCost(price);
+
+            System.out.println("tempOrderFromDB.get() = " + tempOrderFromDB.get());
+
+            orderService.update(tempOrderFromDB.get());
+
+        } else {
+
+            // 2. There is no order in DB yet
+
+            Order tempOrderToBeCreated = new Order(defaultUser, true);
+            Order newTempOrderFromDB = orderService.create(tempOrderToBeCreated); // getting a new temp order with ID
+            Optional<Product> productFromDB = productService.findById(Long.parseLong(productDto.getId())); // finding product in DB
+
+            int amount = Integer.parseInt(productDto.getAmountToOrder());
+            double price = productFromDB.get().getPrice() * amount;
+
+            OrderDetails tempOrderDetails = new OrderDetails(newTempOrderFromDB, productFromDB.get(), amount, price);
+
+            OrderDetails tempOrderDetailsFromDB = orderDetailsService.create(tempOrderDetails);
+
+            List<OrderDetails> orderDetailsList = new ArrayList<>();
+            orderDetailsList.add(tempOrderDetailsFromDB);
+
+            newTempOrderFromDB.setOrderDetailsList(orderDetailsList);
+            newTempOrderFromDB.setCost(price);
+
+            System.out.println("price = " + price);
+
+            System.out.println("newTempOrderFromDB = " + newTempOrderFromDB);
+
+            orderService.create(newTempOrderFromDB);
+
+            // Bad price evaluating.
+
+        }
+
 
         return "get-product-page";
 

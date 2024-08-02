@@ -18,7 +18,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public Order create(Order order) {
-        System.out.println("creating System.out.println(\"creating ... \" + order);... " + order);
         return orderRepository.save(order);
     }
 
@@ -32,6 +31,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findAllByUser(User user) {
         return orderRepository.findAllByUser(user);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Order> findTempByUser(User user) {
+        return orderRepository.findByUserAndTemp(user, true);
     }
 
     @Transactional(readOnly = true)
