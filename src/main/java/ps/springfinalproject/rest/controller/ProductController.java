@@ -8,13 +8,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ps.springfinalproject.domain.Order;
 import ps.springfinalproject.domain.Product;
 import ps.springfinalproject.domain.Stock;
+import ps.springfinalproject.domain.User;
 import ps.springfinalproject.rest.dto.CategoryDto;
+import ps.springfinalproject.rest.dto.OrderDetailsDto;
+import ps.springfinalproject.rest.dto.OrderDto;
 import ps.springfinalproject.rest.dto.ProductDto;
-import ps.springfinalproject.services.CategoryService;
-import ps.springfinalproject.services.ProductService;
-import ps.springfinalproject.services.StockService;
+import ps.springfinalproject.services.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +28,25 @@ public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final StockService stockService;
+    private final OrderDetailsService orderDetailsService;
+    private final OrderService orderService;
+    private final UserService userService;
 
     @GetMapping("/product")
     public String getProductsPage(Model model) {
-        List<ProductDto> productDtoList = productService.findAll().stream().map(ProductDto::toDto).toList();
-        model.addAttribute("productDtoList", productDtoList);
+        model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
+
+        // Adding Cart module to product page:
+        // 1. Searching for current temp order and getting its ID
+        // 2. Getting list of OD bt ID and temp flag
+        // DefaultUser while we don't have any authorisation:
+        User defaultUser = userService.findById(2L).get();
+        Optional<Order> tempOrderFromDB = orderService.findTempByUser(defaultUser);
+        System.out.println("tempOrderFromDB = " + tempOrderFromDB);
+        if (tempOrderFromDB.isPresent()) {
+            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(tempOrderFromDB.get().getId()).stream().map(OrderDetailsDto::toDto).toList());
+            model.addAttribute("orderDto", OrderDto.toDto(tempOrderFromDB.get()));
+        }
         return "get-products-page";
     }
 
@@ -48,7 +64,6 @@ public class ProductController {
         }
         return "404";
     }
-
 
 
     @GetMapping("/product/add")

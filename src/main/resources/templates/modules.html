@@ -27,6 +27,39 @@
     </ul>
 </div>
 
+<!-- CART -->
+<div class="cart" th:fragment="cart">
+    <div th:if="${orderDto!=null}"  ><h1 th:text="|Cart ${orderDto.getCost()}$ total|">Cart:</h1></div>
+
+    <div th:if="${#lists.isEmpty(orderDetailsDtoList)}"> Cart is empty </div>
+    <table class="styled-table" th:unless="${#lists.isEmpty(orderDetailsDtoList)}">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>order_id</th>
+            <th>product</th>
+            <th>amount</th>
+            <th>price</th>
+            <th>edit</th>
+            <th>delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderDetailDto:${orderDetailsDtoList}">
+            <td th:text="${orderDetailDto.id}">999</td>
+            <td th:text="${orderDetailDto.orderId}">999</td>
+            <td><a th:text="${orderDetailDto.productName}" th:href="|/product/${orderDetailDto.productId}|">Default
+                product</a>
+            </td>
+            <td th:text="${orderDetailDto.amount}">999</td>
+            <td th:text="${orderDetailDto.price}">999</td>
+            <td><a th:href="|/order-details/${orderDetailDto.id}/edit|">edit</a></td>
+            <td><a th:href="|/order-details/${orderDetailDto.id}/delete|">delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 <!-- All Users Table -->
 <div th:fragment="allUsersTable">
     <h1>List of all users:</h1>
@@ -216,7 +249,24 @@
         </tr>
         </tbody>
     </table>
+    <script>
+        const coll = document.getElementsByClassName("collapsible");
+        let i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    </script>
 </div>
+
 
 <!-- All OrderDetails table -->
 <div th:fragment="allOrderDetailsTable">
@@ -247,26 +297,7 @@
         </tr>
         </tbody>
     </table>
-    <div th:fragment="allOrdersTable">
-
-        <script>
-            const coll = document.getElementsByClassName("collapsible");
-            let i;
-
-            for (i = 0; i < coll.length; i++) {
-                coll[i].addEventListener("click", function () {
-                    this.classList.toggle("active");
-                    const content = this.nextElementSibling;
-                    if (content.style.display === "block") {
-                        content.style.display = "none";
-                    } else {
-                        content.style.display = "block";
-                    }
-                });
-            }
-        </script>
-
-    </div>
 </div>
+
 </body>
 </html>

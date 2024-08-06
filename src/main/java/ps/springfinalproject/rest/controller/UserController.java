@@ -89,6 +89,9 @@ public class UserController {
         Optional<User> userFromBD = userService.findById(id);
         if (userFromBD.isPresent()) {
             model.addAttribute("userDto", UserDto.toDto(userFromBD.get())); // Sending userDto to model.
+
+            System.out.println("UserDto.toDto((userFromBD.get())).getBirthDate() = " + UserDto.toDto((userFromBD.get())).getBirthDate());
+
             model.addAttribute("userDtoList", userService.findAll().stream().map(UserDto::toDto).toList()); // Sending userDtoList to model.
             model.addAttribute("roleDtoList", roleService.findAll().stream().map(RoleDto::toDto).toList()); // Sending roleDtoList to model.
             return "edit-user-page";

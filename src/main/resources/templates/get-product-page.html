@@ -12,6 +12,8 @@
 <!-- Menu -->
 <div th:replace="~{modules :: navigation}"></div>
 
+<div th:replace="~{modules :: cart}"></div>
+
 <!-- Product details -->
 <div class="main-wrapper">
     <div class="form-wrapper">
@@ -28,13 +30,9 @@
                 <th>image path</th>
                 <th>details</th>
                 <th>amount to order</th>
-                <th>amount to order</th>
             </tr>
             </thead>
             <tbody>
-
-            <div th:text="${productDto}"> </div>
-
             <tr>
                 <td th:text="${productDto.id}">123213</td>
                 <td th:text="${productDto.name}">Default product name</td>
@@ -44,24 +42,24 @@
                     product category</a></td>
                 <td th:text="${productDto.imagePath}">Default product image path</td>
                 <td th:text="${productDto.details}">Default product details</td>
-                <td th:text="|${productDto.amountToOrder}|">123</td>
                 <td>
                     <form th:action="@{/product/{id}(id=${productDto.getId()})}" th:method="post">
                         <!-- need to fill in all DTO fields-->
                         <input hidden="hidden" id="id" name="id" th:value="${productDto.id}">
                         <input hidden="hidden" id="name" name="name" th:value="${productDto.name}">
                         <input hidden="hidden" id="price" name="price" th:value="${productDto.price}">
-                        <input id="amountToOrder" name="amountToOrder" th:field="${productDto.amountToOrder}" th:value="${productDto.amountToOrder}">
-                        <input hidden="hidden" id="amountInStock" name="amountInStock" th:value="${productDto.amountInStock}">
+                        <input id="amountToOrder" name="amountToOrder" th:field="${productDto.amountToOrder}"
+                               th:value="${productDto.amountToOrder}" style="width:50px; padding: 5px;">
+                        <input hidden="hidden" id="amountInStock" name="amountInStock"
+                               th:value="${productDto.amountInStock}">
                         <input hidden="hidden" id="categoryId" name="categoryId" th:value="${productDto.categoryId}">
-                        <input hidden="hidden" id="categoryName" name="categoryName" th:value="${productDto.categoryName}">
+                        <input hidden="hidden" id="categoryName" name="categoryName"
+                               th:value="${productDto.categoryName}">
                         <input hidden="hidden" id="imagePath" name="imagePath" th:value="${productDto.imagePath}">
                         <input hidden="hidden" id="details" name="details" th:value="${productDto.details}">
-                        <input type="submit" value="order">
+                        <input type="submit" value="order" style="padding: 5px;">
                     </form>
                 </td>
-                <td></td>
-
             </tr>
             </tbody>
         </table>

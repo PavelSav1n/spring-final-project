@@ -1,5 +1,6 @@
 package ps.springfinalproject.rest.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ps.springfinalproject.domain.Order;
 import ps.springfinalproject.domain.OrderDetails;
 import ps.springfinalproject.domain.Product;
 import ps.springfinalproject.rest.dto.OrderDetailsDto;
@@ -47,15 +49,11 @@ public class OrderDetailsController {
     @PostMapping("/order-details/add")
     public String postAddOrderDetailsPage(@Valid OrderDetailsDto orderDetailsDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
-
-            System.out.println("orderDetailsDto = " + orderDetailsDto);
             // Setting info DTO fields without checking isPresent() in BD. Might be issues.
             if (!orderDetailsDto.getProductId().isEmpty()) {
-                System.out.println("prod");
                 orderDetailsDto.setProductName(productService.findById(Long.parseLong(orderDetailsDto.getProductId())).get().getName());
             }
             if (!orderDetailsDto.getOrderId().isEmpty()) {
-                System.out.println("ordID");
                 orderDetailsDto.setUserName(orderService.findById(Long.parseLong(orderDetailsDto.getOrderId())).get().getUser().getName());
             }
 
@@ -77,7 +75,6 @@ public class OrderDetailsController {
     @GetMapping("/order-details/{id}")
     public String getOrderDetailsPage(@PathVariable long id, Model model) {
         Optional<OrderDetails> orderDetailsFromBD = orderDetailsService.findById(id);
-        System.out.println("orderDetailsFromBD.get() = " + orderDetailsFromBD.get());
         orderDetailsFromBD.ifPresent(orderDetails -> model.addAttribute("orderDetailsDto", OrderDetailsDto.toDto(orderDetails)));
         return "get-order-details-page";
     }
@@ -90,8 +87,6 @@ public class OrderDetailsController {
             orderDetailsDto.setUserName(orderService.findById(orderDetailsFromBD.get().getOrder().getId()).get().getUser().getName()); // setting userName to orderDetails DTO
             model.addAttribute("orderDetailsDto", orderDetailsDto);
 
-            System.out.println("orderDetailsDto = " + orderDetailsDto); // sending fully set orderDetails DTO
-
             // sending only details from this order:
             model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(orderDetailsFromBD.get().getOrder().getId()).stream().map(OrderDetailsDto::toDto).toList());
             model.addAttribute("orderDtoList", orderService.findAll().stream().map(OrderDto::toDto).toList());
@@ -102,9 +97,9 @@ public class OrderDetailsController {
         return "404";
     }
 
+    // HttpServletRequest request -- needed to track URL where user came from
     @PostMapping("/order-details/{id}/edit")
-    public String postEditOrderDetailsPage(@Valid OrderDetailsDto orderDetailsDto, BindingResult result, Model model) {
-        System.out.println("POSTorderDetailsDto = " + orderDetailsDto);
+    public String postEditOrderDetailsPage(@Valid OrderDetailsDto orderDetailsDto, BindingResult result, Model model, HttpServletRequest request) {
         // if we don't have input tags in View for all our DTO fields they will return as null here
         // So we must add those fields in View in order to preserve them.
         if (result.hasErrors()) {
@@ -122,16 +117,36 @@ public class OrderDetailsController {
 
         orderDetailsService.update(orderDetailsToBeSaved);
 
+        // Also we need to update order "cost" according to new data AFTER we updated orderDetails
+        Order orderToBeUpdatedFromDB = orderService.findById(orderDetailsToBeSaved.getOrder().getId()).get();
+        double totalCost = orderToBeUpdatedFromDB.getOrderDetailsList().stream().mapToDouble(OrderDetails::getPrice).sum(); // summing OD price fields
+        orderToBeUpdatedFromDB.setCost(totalCost);
+
+        orderService.update(orderToBeUpdatedFromDB);
+
         return "redirect:/order-details";
+//        return "redirect:" + request.getHeader("referer"); // returns user to edit order details page. We need either products or all order details
     }
+
 
     // Deleting just by ID in URL path
     @GetMapping("order-details/{id}/delete")
-    public String deleteOrderDetails(@PathVariable long id) {
-        if (orderDetailsService.findById(id).isPresent()) {
+    public String deleteOrderDetails(@PathVariable long id, HttpServletRequest request) {
+        Optional<OrderDetails> orderDetailsToBeDeleted = orderDetailsService.findById(id);
+        if (orderDetailsToBeDeleted.isPresent()) {
+            Order orderToBeUpdatedFromDB = orderService.findById(orderDetailsToBeDeleted.get().getOrder().getId()).get(); // first getting order where OD will be deleted
             orderDetailsService.deleteById(id);
+
+            // Updating Order total cost
+            double totalCost = orderToBeUpdatedFromDB.getOrderDetailsList().stream().mapToDouble(OrderDetails::getPrice).sum(); // summing OD price fields
+            orderToBeUpdatedFromDB.setCost(totalCost);
+
+            orderService.update(orderToBeUpdatedFromDB);
         }
-        return "redirect:/order-details";
+
+        //return "redirect:/order-details";
+        return "redirect:" + request.getHeader("referer");
     }
+
 
 }

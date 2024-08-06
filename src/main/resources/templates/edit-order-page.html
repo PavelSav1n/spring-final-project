@@ -22,14 +22,14 @@
             <!-- id -->
             <div class="mb-3">
                 <label for="id-input">id:</label>
-                <input id="id-input" required readonly="readonly" th:filed="${orderDto.id}" th:value="${orderDto.id}"
+                <input id="id-input" required readonly="readonly" th:field="${orderDto.id}" th:value="${orderDto.id}"
                        class="formbold-form-input"/>
             </div>
             <!-- order date -->
             <div class="mb-3">
                 <label for="order-date-input" class="form-label">Order date:</label>
-                <input id="order-date-input" th:field="${orderDto.orderDate}" th:value="${orderDto.orderDate}"
-                       placeholder="Enter username" class="formbold-form-input"/>
+                <input id="order-date-input" name="orderDate" type="datetime-local" th:value="${orderDto.orderDate}"
+                       class="formbold-form-input"/>
                 <p class="error" th:errors="${orderDto.orderDate}"></p>
             </div>
             <!-- user -->

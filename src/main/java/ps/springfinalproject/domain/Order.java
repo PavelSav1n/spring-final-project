@@ -76,5 +76,8 @@ public class Order {
         this.cost = cost;
     }
 
+    public boolean getTemp (){
+        return temp;
+    }
 
 }

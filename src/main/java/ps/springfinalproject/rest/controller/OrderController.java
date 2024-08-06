@@ -55,6 +55,9 @@ public class OrderController {
         Optional<Order> orderFromBD = orderService.findById(id);
         if (orderFromBD.isPresent()) {
             model.addAttribute("orderDto", OrderDto.toDto(orderFromBD.get()));
+
+            System.out.println(OrderDto.toDto(orderFromBD.get()).getOrderDate());
+
             model.addAttribute("userDtoList", userService.findAll().stream().map(UserDto::toDto).toList());
             model.addAttribute("orderDtoList", orderService.findAll().stream().map(OrderDto::toDto).toList());
             return "edit-order-page";
@@ -69,6 +72,7 @@ public class OrderController {
             model.addAttribute("orderDtoList", orderService.findAll().stream().map(OrderDto::toDto).toList());
             return "edit-order-page";
         }
+
         Optional<Order> orderFromBD = orderService.findById(Long.parseLong(orderDto.getId()));
         if (orderFromBD.isPresent()) {
             // We need to get user from persist. Now we have only user's id and name. We need to get other fields.
@@ -142,7 +146,7 @@ public class OrderController {
 
             // 2. There is no order in DB yet
 
-            Order tempOrderToBeCreated = new Order(defaultUser, true);
+            Order tempOrderToBeCreated = new Order(defaultUser, true); // Setting temp flag in constructor
             Order newTempOrderFromDB = orderService.create(tempOrderToBeCreated); // getting a new temp order with ID
             Optional<Product> productFromDB = productService.findById(Long.parseLong(productDto.getId())); // finding product in DB
 
@@ -170,7 +174,7 @@ public class OrderController {
         }
 
 
-        return "get-product-page";
+        return "redirect:/product";
 
 
     }

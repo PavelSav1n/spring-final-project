@@ -11,6 +11,15 @@
     padding: 50px;
 }
 
+.cart {
+    position: fixed;
+    background-color: #fffee4;
+    right: 0;
+    padding: 5px;
+    margin-top: 43px;
+}
+
+
 @import url(https://fonts.googleapis.com/css?family=Lato);
 ul {
     display: flex;
