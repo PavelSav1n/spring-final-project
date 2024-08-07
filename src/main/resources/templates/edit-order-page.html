@@ -51,6 +51,28 @@
                 </label>
             </div>
 
+            <!-- Cost -->
+            <div class="mb-3">
+                <label for="cost">Total cost:</label>
+                <input readonly="readonly" name="cost" id="cost" th:field="${orderDto.cost}" th:value="${orderDto.cost}"
+                       class="formbold-form-input">
+            </div>
+            <!-- Temp -->
+            <div class="mb-3">
+                <label for="temp"></label>
+                <select name="temp" id="temp" size="1" class="formbold-form-input">
+                    <option th:if="${orderDto.temp=='true'}" hidden="hidden" th:value="${orderDto.temp}"
+                            style="color:red">Temporary cart
+                    </option>
+                    <option th:if="${orderDto.temp=='false'}" hidden="hidden" th:value="${orderDto.temp}"
+                            style="color:green">Ready to process
+                    </option>
+                    <option value="true" style="color:red">Temporary cart</option>
+                    <option value="false" style="color:green">Ready to process</option>
+                </select>
+            </div>
+            <!-- <div class="mb-3" th:if="${orderDto.temp!='true'}" style="color:green">Ready to process</div>-->
+
             <div class="mb-3">
                 <table class="styled-table">
                     <tr>

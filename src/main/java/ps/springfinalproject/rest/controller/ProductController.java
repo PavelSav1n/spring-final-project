@@ -36,17 +36,8 @@ public class ProductController {
     public String getProductsPage(Model model) {
         model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
 
-        // Adding Cart module to product page:
-        // 1. Searching for current temp order and getting its ID
-        // 2. Getting list of OD bt ID and temp flag
-        // DefaultUser while we don't have any authorisation:
-        User defaultUser = userService.findById(2L).get();
-        Optional<Order> tempOrderFromDB = orderService.findTempByUser(defaultUser);
-        System.out.println("tempOrderFromDB = " + tempOrderFromDB);
-        if (tempOrderFromDB.isPresent()) {
-            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(tempOrderFromDB.get().getId()).stream().map(OrderDetailsDto::toDto).toList());
-            model.addAttribute("orderDto", OrderDto.toDto(tempOrderFromDB.get()));
-        }
+        cartModule(model);
+
         return "get-products-page";
     }
 
@@ -59,10 +50,24 @@ public class ProductController {
             if (stockService.findByProductId(id).isPresent())
                 productDto.setAmountInStock(String.valueOf(stockService.findByProductId(id).get().getAmount())); // Setting correct stocks for product
             model.addAttribute("productDto", productDto);
-            System.out.println("productDto = " + productDto);
+
+            cartModule(model);
+
             return "get-product-page";
         }
         return "404";
+    }
+
+    // This is a cart module.
+    // Passing to View orderDetailsDtoList and orderDto
+    // DefaultUser while we don't have any authorisation -- user_id = 2L
+    private void cartModule(Model model) {
+        User defaultUser = userService.findById(2L).get();
+        Optional<Order> tempOrderFromDB = orderService.findTempByUser(defaultUser);
+        if (tempOrderFromDB.isPresent()) {
+            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(tempOrderFromDB.get().getId()).stream().map(OrderDetailsDto::toDto).toList());
+            model.addAttribute("orderDto", OrderDto.toDto(tempOrderFromDB.get()));
+        }
     }
 
 

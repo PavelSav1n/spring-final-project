@@ -61,11 +61,12 @@ public class Order {
     }
 
     // Constructor for UPDATE
-    public Order(long id, String orderDate, User user, double cost) {
+    public Order(long id, String orderDate, User user, double cost, boolean temp) {
         this.id = id;
         this.orderDate = orderDate;
         this.user = user;
         this.cost = cost;
+        this.temp = temp;
     }
 
 
