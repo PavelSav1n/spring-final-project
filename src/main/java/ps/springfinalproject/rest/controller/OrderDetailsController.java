@@ -137,6 +137,12 @@ public class OrderDetailsController {
             Order orderToBeUpdatedFromDB = orderService.findById(orderDetailsToBeDeleted.get().getOrder().getId()).get(); // first getting order where OD will be deleted
             orderDetailsService.deleteById(id);
 
+            // If there are no orderDetails in order, we must delete that order
+            if (orderToBeUpdatedFromDB.getOrderDetailsList().isEmpty()) {
+                orderService.delete(orderToBeUpdatedFromDB);
+                return "redirect:" + request.getHeader("referer");
+            }
+
             // Updating Order total cost
             double totalCost = orderToBeUpdatedFromDB.getOrderDetailsList().stream().mapToDouble(OrderDetails::getPrice).sum(); // summing OD price fields
             orderToBeUpdatedFromDB.setCost(totalCost);

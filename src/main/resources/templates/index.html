@@ -2,15 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Main page</title>
-  <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <title>Main page</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 
 <body>
 
 <!-- Menu -->
 <div th:replace="~{modules :: navigation}"></div>
+
+<div class="main-wrapper">
+    <div class="form-wrapper">
+        <h1 style="text-align: center">Spring MVC, Thymeleaf, SQL, JPA web application</h1>
+    </div>
+</div>
+
 
 </body>
 </html>

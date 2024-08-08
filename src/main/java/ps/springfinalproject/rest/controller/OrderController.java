@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ps.springfinalproject.domain.Order;
+import ps.springfinalproject.domain.OrderDetails;
 import ps.springfinalproject.domain.User;
 import ps.springfinalproject.rest.dto.OrderDto;
 import ps.springfinalproject.rest.dto.UserDto;
@@ -16,6 +17,7 @@ import ps.springfinalproject.services.OrderDetailsService;
 import ps.springfinalproject.services.OrderService;
 import ps.springfinalproject.services.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -81,6 +83,20 @@ public class OrderController {
             return "redirect:/order";
         }
         return "404";
+    }
+
+    // Deleting order with all its orderDetails
+    @GetMapping("/order/{id}/delete")
+    public String deleteOrder(@PathVariable long id) {
+        Optional<Order> orderToBeDeleted = orderService.findById(id);
+        if (orderToBeDeleted.isPresent()) {
+            List<OrderDetails> orderDetailsListToBeDeleted = orderDetailsService.findAllByOrderId(id);
+            for (OrderDetails orderDetails : orderDetailsListToBeDeleted) {
+                orderDetailsService.delete(orderDetails);
+            }
+            orderService.delete(orderToBeDeleted.get());
+        }
+        return "redirect:/order";
     }
 
 }
