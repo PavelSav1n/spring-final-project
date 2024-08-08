@@ -31,34 +31,39 @@
 <div class="cart" th:fragment="cart">
     <div th:if="${orderDto!=null}"><h1 th:text="|Cart ${orderDto.getCost()}$ total|">Cart:</h1></div>
 
-    <div th:if="${#lists.isEmpty(orderDetailsDtoList)}"> Cart is empty</div>
+    <div th:if="${#lists.isEmpty(orderDetailsDtoList)}"><h1>Cart is empty</h1></div>
 
-    <table class="styled-table" th:unless="${#lists.isEmpty(orderDetailsDtoList)}">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>order_id</th>
-            <th>product</th>
-            <th>amount</th>
-            <th>price</th>
-            <th>edit</th>
-            <th>delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="orderDetailDto:${orderDetailsDtoList}">
-            <td th:text="${orderDetailDto.id}">999</td>
-            <td th:text="${orderDetailDto.orderId}">999</td>
-            <td><a th:text="${orderDetailDto.productName}" th:href="|/product/${orderDetailDto.productId}|">Default
-                product</a>
-            </td>
-            <td th:text="${orderDetailDto.amount}">999</td>
-            <td th:text="${orderDetailDto.price}">999</td>
-            <td><a th:href="|/order-details/${orderDetailDto.id}/edit|">edit</a></td>
-            <td><a th:href="|/order-details/${orderDetailDto.id}/delete|">delete</a></td>
-        </tr>
-        </tbody>
-    </table>
+    <div th:unless="${#lists.isEmpty(orderDetailsDtoList)}">
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>order_id</th>
+                <th>product</th>
+                <th>amount</th>
+                <th>price</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderDetailDto:${orderDetailsDtoList}">
+                <td th:text="${orderDetailDto.id}">999</td>
+                <td th:text="${orderDetailDto.orderId}">999</td>
+                <td><a th:text="${orderDetailDto.productName}" th:href="|/product/${orderDetailDto.productId}|">Default
+                    product</a>
+                </td>
+                <td th:text="${orderDetailDto.amount}">999</td>
+                <td th:text="${orderDetailDto.price}">999</td>
+                <td><a th:href="|/order-details/${orderDetailDto.id}/edit|">edit</a></td>
+                <td><a th:href="|/order-details/${orderDetailDto.id}/delete|">delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="btns">
+            <div class="btn-div"><a class="btn" href="/cart/checkout">Checkout</a></div>
+        </div>
+    </div>
 </div>
 
 <!-- All Users Table -->
@@ -184,7 +189,6 @@
             <th>id</th>
             <th>product</th>
             <th>amount</th>
-            <th>price</th>
             <th>edit</th>
             <th>delete</th>
         </tr>
@@ -195,7 +199,6 @@
             <td><a th:text="${stockDto.productName}" th:href="|/product/${stockDto.productId}|">Default product</a>
             </td>
             <td th:text="${stockDto.amount}">9999</td>
-            <td th:text="${stockDto.price}">999</td>
             <td><a th:href="|/stock/${stockDto.id}/edit|">edit</a></td>
             <td><a th:href="|/stock/${stockDto.id}/delete|">delete</a></td>
         </tr>

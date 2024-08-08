@@ -8,19 +8,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ps.springfinalproject.domain.Order;
 import ps.springfinalproject.domain.Product;
 import ps.springfinalproject.domain.Stock;
-import ps.springfinalproject.domain.User;
 import ps.springfinalproject.rest.dto.CategoryDto;
-import ps.springfinalproject.rest.dto.OrderDetailsDto;
-import ps.springfinalproject.rest.dto.OrderDto;
 import ps.springfinalproject.rest.dto.ProductDto;
 import ps.springfinalproject.services.*;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static ps.springfinalproject.rest.controller.CartController.cartModule;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,7 +32,7 @@ public class ProductController {
     public String getProductsPage(Model model) {
         model.addAttribute("productDtoList", productService.findAll().stream().map(ProductDto::toDto).toList());
 
-        cartModule(model);
+        cartModule(model, userService, orderDetailsService, orderService);
 
         return "get-products-page";
     }
@@ -51,25 +47,12 @@ public class ProductController {
                 productDto.setAmountInStock(String.valueOf(stockService.findByProductId(id).get().getAmount())); // Setting correct stocks for product
             model.addAttribute("productDto", productDto);
 
-            cartModule(model);
+            cartModule(model, userService, orderDetailsService, orderService);
 
             return "get-product-page";
         }
         return "404";
     }
-
-    // This is a cart module.
-    // Passing to View orderDetailsDtoList and orderDto
-    // DefaultUser while we don't have any authorisation -- user_id = 2L
-    private void cartModule(Model model) {
-        User defaultUser = userService.findById(2L).get();
-        Optional<Order> tempOrderFromDB = orderService.findTempByUser(defaultUser);
-        if (tempOrderFromDB.isPresent()) {
-            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(tempOrderFromDB.get().getId()).stream().map(OrderDetailsDto::toDto).toList());
-            model.addAttribute("orderDto", OrderDto.toDto(tempOrderFromDB.get()));
-        }
-    }
-
 
     @GetMapping("/product/add")
     public String addProductPage(Model model) {
@@ -90,7 +73,7 @@ public class ProductController {
         }
         Product product = ProductDto.fromDto(productDto);
         productService.create(product);
-        stockService.create(new Stock(productService.findById(product.getId()).get(), 0, 0)); // Creating product will create default stock for it
+        stockService.create(new Stock(productService.findById(product.getId()).get(), 0)); // Creating product will create default stock for it
         return "redirect:/product";
     }
 
@@ -143,6 +126,4 @@ public class ProductController {
         }
         return "404";
     }
-
-
 }

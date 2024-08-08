@@ -5,17 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ps.springfinalproject.domain.Order;
-import ps.springfinalproject.domain.OrderDetails;
-import ps.springfinalproject.domain.Product;
-import ps.springfinalproject.domain.User;
+import ps.springfinalproject.domain.*;
+import ps.springfinalproject.rest.dto.OrderDetailsDto;
+import ps.springfinalproject.rest.dto.OrderDto;
 import ps.springfinalproject.rest.dto.ProductDto;
-import ps.springfinalproject.services.OrderDetailsService;
-import ps.springfinalproject.services.OrderService;
-import ps.springfinalproject.services.ProductService;
-import ps.springfinalproject.services.UserService;
+import ps.springfinalproject.services.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -29,6 +26,7 @@ public class CartController {
     private final OrderService orderService;
     private final OrderDetailsService orderDetailsService;
     private final ProductService productService;
+    private final StockService stockService;
 
 
     //TODO:*********************************************************************************************
@@ -37,10 +35,42 @@ public class CartController {
     // 2. Creating a temp orderDetail
     // 3. Put there Product and amountToOrder
 
+    // Checkout is simple for now:
+    // 1. We reevaluate stocks. If there is not enough stock, just redirect to /order with message in console.
+    // 2. Find temp order in DB for this user, setting its temp flag to false.
+    // 3. Updating order in DB
+    @GetMapping("/cart/checkout")
+    public String postCartCheckout(Model model) {
+        // DefaultUser while we don't have any authorisation:
+        User defaultUser = userService.findById(2L).get();
+        Optional<Order> tempOrderFromDB = orderService.findTempByUser(defaultUser);
+        if (tempOrderFromDB.isPresent()) {
+            for (OrderDetails orderDetails : tempOrderFromDB.get().getOrderDetailsList()) {
+                Stock stock = stockService.findByProductId(orderDetails.getProduct().getId()).get();
+                if ((stock.getAmount() - orderDetails.getAmount()) < 0) {
+                    System.out.println("NOT ENOUGH STOCK OF '" + stock.getProduct().getName() + "' WHILE CHECKING OUT");
+                    return "redirect:/order";
+                }
+                stock.setAmount(stock.getAmount() - orderDetails.getAmount());
+            }
+            tempOrderFromDB.get().setTemp(false);
+            orderService.update(tempOrderFromDB.get());
+            return "redirect:/order";
+        }
+        return "redirect:/";
+    }
+
     @PostMapping("/product/{id}")
     public String postGetProductPage(@PathVariable long id, @Valid ProductDto productDto, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            System.out.println("error");
+        if (result.hasErrors()) { // Positive amounts a verified through @Annotations in DTO
+            cartModule(model, userService, orderDetailsService, orderService);
+            return "get-product-page";
+        }
+
+        if (Integer.parseInt(productDto.getAmountToOrder()) > stockService.findByProductId(Long.parseLong((productDto.getId()))).get().getAmount()) {
+            result.rejectValue("amountToOrder", null, "There is not enough '" + productDto.getName() + "' in stock. Please check available amount");
+            cartModule(model, userService, orderDetailsService, orderService);
+            return "get-product-page";
         }
 
         // DefaultUser while we don't have any authorisation:
@@ -100,10 +130,18 @@ public class CartController {
 
 
         }
-
-
         return "redirect:/product";
+    }
 
-
+    // This is a cart module.
+    // Passing to View orderDetailsDtoList and orderDto
+    // DefaultUser while we don't have any authorisation -- user_id = 2L
+    static void cartModule(Model model, UserService userService, OrderDetailsService orderDetailsService, OrderService orderService) {
+        User defaultUser = userService.findById(2L).get();
+        Optional<Order> tempOrderFromDB = orderService.findTempByUser(defaultUser);
+        if (tempOrderFromDB.isPresent()) {
+            model.addAttribute("orderDetailsDtoList", orderDetailsService.findAllByOrderId(tempOrderFromDB.get().getId()).stream().map(OrderDetailsDto::toDto).toList());
+            model.addAttribute("orderDto", OrderDto.toDto(tempOrderFromDB.get()));
+        }
     }
 }

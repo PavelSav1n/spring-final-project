@@ -19,11 +19,9 @@ public class Stock {
     private Product product;
 
     private int amount;
-    private double price;
 
-    public Stock(Product product, int amount, double price) {
+    public Stock(Product product, int amount) {
         this.product = product;
         this.amount = amount;
-        this.price = price;
     }
 }

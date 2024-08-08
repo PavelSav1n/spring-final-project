@@ -17,7 +17,8 @@
     <div class="form-wrapper">
         <h1>Edit order details:</h1>
 
-        <form id="add-order-details-form" th:action="@{/order-details/{id}/edit(id=${orderDetailsDto.getId()})}" th:method="post"
+        <form id="add-order-details-form" th:action="@{/order-details/{id}/edit(id=${orderDetailsDto.getId()})}"
+              th:method="post"
               action="add-order-details-page.html">
 
             <table>
@@ -43,7 +44,8 @@
                     <label for="order-details-input">Select order:</label>
 
                     <select name="orderId" size="1" class="formbold-form-input" id="order-details-input">
-                        <option hidden="hidden" th:text="|Order #${orderDetailsDto.orderId} from ${orderDetailsDto.userName}|"
+                        <option hidden="hidden"
+                                th:text="|Order #${orderDetailsDto.orderId} from ${orderDetailsDto.userName}|"
                                 th:value="${orderDetailsDto.orderId}">
                             <!-- ID values will be preserved -->
                             Select order ID
@@ -88,13 +90,14 @@
 
                 <!-- Price -->
                 <div class="mb-3">
-                    <label for="stock-price-input">Enter price:</label>
+                    <label for="stock-price-input">Price:</label>
                     <input id="stock-price-input"
                            name="price"
                            th:field="${orderDetailsDto.price}"
                            th:value="${orderDetailsDto.price}"
                            placeholder="Enter price"
-                           class="formbold-form-input"/>
+                           class="formbold-form-input"
+                           readonly="readonly"/>
                     <p class="error" th:errors="${orderDetailsDto.price}"></p>
                 </div>
 
